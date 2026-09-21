@@ -8,7 +8,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="icon" type="image/x-icon" href="favicon.ico">
-<link rel="manifest" href="site.webmanifest"> 
+<link rel="manifest" href="site.webmanifest">
 <meta name="google-site-verification" content="WLZbk2K76hU7Wa19mtEi24TlZVeMiugNskih2XS7BRQ" />
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:system-ui}
@@ -54,8 +54,8 @@ img.thumb-big{width:100%;border-radius:12px;margin-bottom:10px}
 <!-- MODAL DETALHE EMPRESA -->
 <div id="empresaModal" class="modal" onclick="if(event.target==this) fecharEmpresa()"><div class="modalBox"><div id="empresaDetalhe"></div></div></div>
 
-<!-- MODAL AVALIAR -->
-<div id="modalAvaliar" class="modal" onclick="if(event.target==this) fecharAvaliar()"><div class="modalBox"><h3 id="avNome">Avaliar</h3><div style="text-align:center;margin:12px 0"><span class="star-input" onclick="setNota(1)">★</span><span class="star-input" onclick="setNota(2)">★</span><span class="star-input" onclick="setNota(3)">★</span><span class="star-input" onclick="setNota(4)">★</span><span class="star-input" onclick="setNota(5)">★</span></div><input id="avQuem" placeholder="Seu nome"><textarea id="avComent" placeholder="Comentário"></textarea><button class="btn btn-green" onclick="enviarAvaliacao()" style="width:100%">Enviar avaliação</button><button class="btn btn-dark" onclick="fecharAvaliar()" style="width:100%;margin-top:8px">Cancelar</button><div id="listaAv" style="margin-top:18px"></div><p id="avStatus" class="muted"></p></div></div>
+<!-- MODAL AVALIAR - CORRIGIDO COM E-MAIL -->
+<div id="modalAvaliar" class="modal" onclick="if(event.target==this) fecharAvaliar()"><div class="modalBox"><h3 id="avNome">Avaliar</h3><div style="text-align:center;margin:12px 0"><span class="star-input" onclick="setNota(1)">★</span><span class="star-input" onclick="setNota(2)">★</span><span class="star-input" onclick="setNota(3)">★</span><span class="star-input" onclick="setNota(4)">★</span><span class="star-input" onclick="setNota(5)">★</span></div><input id="avQuem" placeholder="Seu nome *"><input id="avEmail" type="email" placeholder="Seu e-mail * (1 avaliação por empresa)"><textarea id="avComent" placeholder="Comentário"></textarea><button class="btn btn-green" onclick="enviarAvaliacao()" style="width:100%">Enviar avaliação</button><button class="btn btn-dark" onclick="fecharAvaliar()" style="width:100%;margin-top:8px">Cancelar</button><div id="listaAv" style="margin-top:18px"></div><p id="avStatus" class="muted"></p></div></div>
 
 <!-- MODAL QR -->
 <div id="qrModal" class="modal" onclick="if(event.target==this) fecharQR()"><div class="modalBox" style="text-align:center"><h3 id="qrNome"></h3><div id="qrcode" style="display:flex;justify-content:center;margin:16px 0"></div><p id="qrLink" class="muted" style="font-size:11px;word-break:break-all"></p><button class="btn btn-dark" onclick="fecharQR()" style="width:100%;margin-top:10px">Fechar</button><button class="btn btn-blue" onclick="baixarQR()" style="width:100%;margin-top:8px">⬇️ Baixar QR</button></div></div>
@@ -114,9 +114,49 @@ window.pedirSenhaQR=(id,nome)=>{
 
 async function carregarRank(){const r=document.getElementById('rankLista');r.innerHTML='Carregando...';try{const se=await getDocs(collection(db,'empresas'));let medias={},counts={};try{const sa=await getDocs(collection(db,'avaliacoes'));sa.forEach(d=>{const a=d.data();if(!medias[a.empresaId]){medias[a.empresaId]=0;counts[a.empresaId]=0}medias[a.empresaId]+=a.nota;counts[a.empresaId]++});Object.keys(medias).forEach(k=>medias[k]/=counts[k])}catch(e){}if(se.empty){r.innerHTML='Nenhuma empresa';return}const lista=[];se.forEach(doc=>{const emp=doc.data();lista.push({id:doc.id,nome:emp.nome,cat:emp.cat||'Outros',media:medias[doc.id]||0,qtd:counts[doc.id]||0})});lista.sort((a,b)=>b.media-a.media);const porCat={};lista.forEach(l=>{if(!porCat[l.cat])porCat[l.cat]=[];porCat[l.cat].push(l)});r.innerHTML=Object.keys(porCat).map(cat=>`<div class="card" style="cursor:default"><h3>${cat}</h3>${porCat[cat].map((e,i)=>`<p style="margin-top:8px;cursor:pointer" onclick="abrirEmpresa('${e.id}')">${i+1}º ${e.nome} - <span class="stars">${renderStars(e.media)}</span> ${e.media.toFixed(1)} (${e.qtd})</p>`).join('')}</div>`).join('')}catch(e){r.innerHTML='❌ '+e.message}}
 window.setNota=n=>{notaAtual=n;document.querySelectorAll('.star-input').forEach((el,i)=>el.classList.toggle('active',i<n))}
-window.abrirAvaliar=async(id,nome)=>{empresaAtiva=id;document.getElementById('avNome').textContent='Avaliar: '+nome;document.getElementById('modalAvaliar').style.display='flex';notaAtual=0;setNota(0);document.getElementById('avQuem').value='';document.getElementById('avComent').value='';document.getElementById('avStatus').textContent='';const la=document.getElementById('listaAv');la.innerHTML='Carregando...';try{const q=query(collection(db,'avaliacoes'),where('empresaId','==',id));const s=await getDocs(q);if(s.empty){la.innerHTML='<p class="muted">Nenhuma avaliação ainda</p>';return}const avs=[];s.forEach(d=>avs.push(d.data()));avs.sort((a,b)=>b.criado-a.criado);la.innerHTML='<h4>Avaliações:</h4>'+avs.map(a=>`<div style="border-top:1px solid #eee;padding:10px 0"><span class="stars">${renderStars(a.nota)}</span> <b>${a.nome}</b><p class="muted">${a.comentario||''}</p></div>`).join('')}catch(e){la.textContent='Erro: '+e.message}}
+window.abrirAvaliar=async(id,nome)=>{empresaAtiva=id;document.getElementById('avNome').textContent='Avaliar: '+nome;document.getElementById('modalAvaliar').style.display='flex';notaAtual=0;setNota(0);document.getElementById('avQuem').value='';document.getElementById('avEmail').value='';document.getElementById('avComent').value='';document.getElementById('avStatus').textContent='';const la=document.getElementById('listaAv');la.innerHTML='Carregando...';try{const q=query(collection(db,'avaliacoes'),where('empresaId','==',id));const s=await getDocs(q);if(s.empty){la.innerHTML='<p class="muted">Nenhuma avaliação ainda</p>';return}const avs=[];s.forEach(d=>avs.push(d.data()));avs.sort((a,b)=>b.criado-a.criado);la.innerHTML='<h4>Avaliações:</h4>'+avs.map(a=>`<div style="border-top:1px solid #eee;padding:10px 0"><span class="stars">${renderStars(a.nota)}</span> <b>${a.nome}</b><p class="muted">${a.comentario||''}</p></div>`).join('')}catch(e){la.textContent='Erro: '+e.message}}
 window.fecharAvaliar=()=>document.getElementById('modalAvaliar').style.display='none';
-window.enviarAvaliacao=async()=>{if(!notaAtual){alert('Escolha estrelas');return}const st=document.getElementById('avStatus');st.textContent='Enviando...';try{await addDoc(collection(db,'avaliacoes'),{empresaId:empresaAtiva,nome:document.getElementById('avQuem').value||'Anônimo',nota:notaAtual,comentario:document.getElementById('avComent').value,criado:Date.now()});st.textContent='✅ Enviado!';setTimeout(()=>{fecharAvaliar();fecharEmpresa();carregar()},1000)}catch(e){st.textContent='❌ '+e.message}}
+
+// FUNÇÃO CORRIGIDA COM BLOQUEIO POR E-MAIL
+window.enviarAvaliacao=async()=>{
+  if(!notaAtual){alert('Escolha as estrelas! ⭐');return}
+  const nome = document.getElementById('avQuem').value.trim();
+  const emailRaw = document.getElementById('avEmail').value.trim();
+  const email = emailRaw.toLowerCase();
+  const comentario = document.getElementById('avComent').value.trim();
+  const st=document.getElementById('avStatus');
+
+  if(!nome){alert('Digite seu nome');return}
+  if(!email ||!email.includes('@')){alert('Digite um e-mail válido!');return}
+
+  st.textContent='⏳ Verificando...';
+  try{
+    // VERIFICA SE ESSE E-MAIL JÁ AVALIOU ESSA EMPRESA
+    const qCheck = query(collection(db,'avaliacoes'), where('empresaId','==',empresaAtiva), where('email','==',email));
+    const snapCheck = await getDocs(qCheck);
+    if(!snapCheck.empty){
+      st.textContent='❌ Esse e-mail já avaliou essa empresa!';
+      alert('⛔ Esse e-mail já avaliou essa empresa! Cada pessoa só pode avaliar 1 vez.');
+      return;
+    }
+
+    st.textContent='Enviando...';
+    await addDoc(collection(db,'avaliacoes'),{
+      empresaId:empresaAtiva,
+      nome:nome,
+      email:email,
+      nota:notaAtual,
+      comentario:comentario,
+      criado:Date.now()
+    });
+    st.textContent='✅ Avaliação enviada com sucesso!';
+    setTimeout(()=>{fecharAvaliar();fecharEmpresa();carregar()},1200)
+  }catch(e){
+    st.textContent='❌ '+e.message;
+    console.error(e);
+  }
+}
+
 window.gerarQR=(id,nome)=>{document.getElementById('qrNome').textContent=nome;const link=`https://ianzinpaixao-collab.github.io/Teste2/#${id}`;document.getElementById('qrLink').textContent=link;const b=document.getElementById('qrcode');b.innerHTML='';new QRCode(b,{text:link,width:220,height:220});document.getElementById('qrModal').style.display='flex'}
 window.fecharQR=()=>document.getElementById('qrModal').style.display='none';
 window.baixarQR=()=>{const c=document.querySelector('#qrcode canvas');if(c){const a=document.createElement('a');a.href=c.toDataURL();a.download='qrcode.png';a.click()}}
