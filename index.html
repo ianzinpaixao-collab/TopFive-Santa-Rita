@@ -9,7 +9,6 @@
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <link rel="manifest" href="site.webmanifest">
-<meta name="google-site-verification" content="WLZbk2K76hU7Wa19mtEi24TlZVeMiugNskih2XS7BRQ" />
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:system-ui}
 body{background:#f5f5f7;color:#111}
@@ -23,7 +22,6 @@ header{background:#0f0f0f;color:#fff;padding:14px 18px;display:flex;gap:10px;ali
 .btn-green{background:#00c851;color:#fff}
 main{padding:18px;max-width:950px;margin:auto}
 .card{background:#fff;border-radius:18px;padding:16px;margin-bottom:14px;box-shadow:0 4px 20px rgba(0,0,0,.06);cursor:pointer}
-.card.no-click{cursor:default}
 .muted{color:#666;font-size:14px}
 input,select,textarea{width:100%;padding:13px;border-radius:12px;border:1px solid #ddd;margin-top:6px;margin-bottom:12px}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -49,10 +47,9 @@ img.thumb-big{width:100%;border-radius:12px;margin-bottom:10px}
 <main>
 <div id="tab-empresas"><div id="statusBox">⏳ Carregando...</div><div id="lista"></div></div>
 <div id="tab-rank" style="display:none"><h2>🏆 Ranking</h2><div id="rankLista"></div></div>
-<div id="tab-cad" style="display:none"><div class="card" style="cursor:default"><h3>🔒 Área Admin</h3><input id="senha" type="password" placeholder="Senha de administrador"><input id="nome" placeholder="Nome da empresa *"><input id="cnpj" placeholder="CNPJ"><input id="email" placeholder="E-mail"><input id="whats" placeholder="WhatsApp"><select id="cat"><option value="">Categoria *</option><option>Venda de Serviços</option><option>Alimentação</option><option>Saúde</option><option>Beleza</option><option>Educação</option><option>Varejo</option><option>Outros</option></select><textarea id="desc" placeholder="Descrição"></textarea><input id="fotos" type="file" multiple accept="image/*"><div id="preview" class="grid"></div><button class="btn btn-blue" id="btnSalvar" onclick="salvar()" style="width:100%;margin-top:12px">Salvar empresa</button><p id="saveStatus" class="muted"></p><hr style="margin:16px 0"><button class="btn btn-yellow" onclick="limparAntigas()" style="width:100%">🧹 Apagar avaliações antigas sem e-mail (duplicadas)</button><p id="cleanStatus" class="muted"></p></div></div>
-
+<div id="tab-cad" style="display:none"><div class="card" style="cursor:default"><h3>🔒 Área Admin</h3><input id="senha" type="password" placeholder="Senha de administrador"><input id="nome" placeholder="Nome da empresa *"><input id="cnpj" placeholder="CNPJ"><input id="email" placeholder="E-mail"><input id="whats" placeholder="WhatsApp"><select id="cat"><option value="">Categoria *</option><option>Venda de Serviços</option><option>Alimentação</option><option>Saúde</option><option>Beleza</option><option>Educação</option><option>Varejo</option><option>Outros</option></select><textarea id="desc" placeholder="Descrição"></textarea><input id="fotos" type="file" multiple accept="image/*"><div id="preview" class="grid"></div><button class="btn btn-blue" id="btnSalvar" onclick="salvar()" style="width:100%;margin-top:12px">Salvar empresa</button><p id="saveStatus" class="muted"></p><hr style="margin:16px 0"><button class="btn btn-yellow" onclick="limparAntigas()" style="width:100%">🧹 Apagar avaliações antigas sem e-mail</button><p id="cleanStatus" class="muted"></p></div></div>
 <div id="empresaModal" class="modal" onclick="if(event.target==this) fecharEmpresa()"><div class="modalBox"><div id="empresaDetalhe"></div></div></div>
-<div id="modalAvaliar" class="modal" onclick="if(event.target==this) fecharAvaliar()"><div class="modalBox"><h3 id="avNome">Avaliar</h3><div style="text-align:center;margin:12px 0"><span class="star-input" onclick="setNota(1)">★</span><span class="star-input" onclick="setNota(2)">★</span><span class="star-input" onclick="setNota(3)">★</span><span class="star-input" onclick="setNota(4)">★</span><span class="star-input" onclick="setNota(5)">★</span></div><input id="avQuem" placeholder="Seu nome *"><input id="avEmail" type="email" placeholder="Seu e-mail * (1 avaliação por empresa)"><textarea id="avComent" placeholder="Comentário"></textarea><button class="btn btn-green" onclick="enviarAvaliacao()" style="width:100%">Enviar avaliação</button><button class="btn btn-dark" onclick="fecharAvaliar()" style="width:100%;margin-top:8px">Cancelar</button><div id="listaAv" style="margin-top:18px"></div><p id="avStatus" class="muted"></p></div></div>
+<div id="modalAvaliar" class="modal" onclick="if(event.target==this) fecharAvaliar()"><div class="modalBox"><h3 id="avNome">Avaliar</h3><div style="text-align:center;margin:12px 0"><span class="star-input" onclick="setNota(1)">★</span><span class="star-input" onclick="setNota(2)">★</span><span class="star-input" onclick="setNota(3)">★</span><span class="star-input" onclick="setNota(4)">★</span><span class="star-input" onclick="setNota(5)">★</span></div><input id="avQuem" placeholder="Seu nome *"><input id="avEmail" type="email" placeholder="Seu e-mail *"><textarea id="avComent" placeholder="Comentário"></textarea><button class="btn btn-green" onclick="enviarAvaliacao()" style="width:100%">Enviar avaliação</button><button class="btn btn-dark" onclick="fecharAvaliar()" style="width:100%;margin-top:8px">Cancelar</button><div id="listaAv" style="margin-top:18px"></div><p id="avStatus" class="muted"></p></div></div>
 <div id="qrModal" class="modal" onclick="if(event.target==this) fecharQR()"><div class="modalBox" style="text-align:center"><h3 id="qrNome"></h3><div id="qrcode" style="display:flex;justify-content:center;margin:16px 0"></div><p id="qrLink" class="muted" style="font-size:11px;word-break:break-all"></p><button class="btn btn-dark" onclick="fecharQR()" style="width:100%;margin-top:10px">Fechar</button><button class="btn btn-blue" onclick="baixarQR()" style="width:100%;margin-top:8px">⬇️ Baixar QR</button></div></div>
 </main>
 <script type="module">
@@ -70,17 +67,77 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 let fotosBase64=[]; let empresasCache=[]; let empresaAtiva=null; let notaAtual=0;
 const SENHA_ADMIN = "102030";
-window.showTab=(t)=>{document.getElementById('tab-empresas').style.display=t==='empresas'?'block':'none';document.getElementById('tab-rank').style.display=t==='rank'?'block':'none';document.getElementById('tab-cad').style.display=t==='cad'?'block':'none';if(t==='empresas') carregar();if(t==='rank') carregarRank();}
+window.showTab=(t)=>{
+  document.getElementById('tab-empresas').style.display=t==='empresas'?'block':'none';
+  document.getElementById('tab-rank').style.display=t==='rank'?'block':'none';
+  document.getElementById('tab-cad').style.display=t==='cad'?'block':'none';
+  if(t==='empresas') carregar();
+  if(t==='rank') carregarRank();
+}
 function comprimir(f){return new Promise(r=>{const fr=new FileReader();fr.onload=e=>{const im=new Image();im.onload=()=>{const c=document.createElement('canvas');let w=im.width,h=im.height;const m=800;if(w>h){if(w>m){h*=m/w;w=m}}else if(h>m){w*=m/h;h=m}c.width=w;c.height=h;c.getContext('2d').drawImage(im,0,0,w,h);r(c.toDataURL('image/jpeg',0.6))};im.src=e.target.result};fr.readAsDataURL(f)})}
-document.getElementById('fotos').addEventListener('change', async e=>{fotosBase64=[];const p=document.getElementById('preview');p.innerHTML='Comprimindo...';for(const f of e.target.files)fotosBase64.push(await comprimir(f));p.innerHTML=fotosBase64.map(b=>`<img src="${b}" class="thumb">`).join('')});
+document.getElementById('fotos').addEventListener('change', async e=>{
+  fotosBase64=[];const p=document.getElementById('preview');p.innerHTML='Comprimindo...';
+  for(const f of e.target.files) fotosBase64.push(await comprimir(f));
+  p.innerHTML=fotosBase64.map(b=>`<img src="${b}" class="thumb">`).join('')
+});
 function renderStars(m){const n=Math.round(m||0);return '★'.repeat(n)+'☆'.repeat(5-n);}
-async function carregar(){const sb=document.getElementById('statusBox');const li=document.getElementById('lista');sb.textContent='⏳ Carregando...';try{let snapE=await getDocs(collection(db,'empresas'));let medias={},counts={};try{let snapA=await getDocs(collection(db,'avaliacoes'));snapA.forEach(d=>{const a=d.data();if(!medias[a.empresaId]){medias[a.empresaId]=0;counts[a.empresaId]=0}medias[a.empresaId]+=a.nota;counts[a.empresaId]++});Object.keys(medias).forEach(k=>medias[k]/=counts[k])}catch(e){}if(snapE.empty){sb.textContent='✅ Nenhuma empresa';li.innerHTML='';empresasCache=[];return}sb.textContent=`✅ ${snapE.size} empresa(s) - clique no card para ver detalhes`;empresasCache=[];snapE.forEach(d=>empresasCache.push({id:d.id,...d.data()}));empresasCache.sort((a,b)=>(medias[b.id]||0)-(medias[a.id]||0));li.innerHTML=empresasCache.map(emp=>{const md=medias[emp.id]||0;const qt=counts[emp.id]||0;return `<div class="card" onclick="abrirEmpresa('${emp.id}')">${emp.fotos?.[0]?`<img src="${emp.fotos[0]}" class="thumb" style="margin-bottom:10px">`:''}<h3>${emp.nome}</h3><div style="margin:6px 0"><span class="badge">${emp.cat||'Outros'}</span> <span class="stars">${renderStars(md)}</span> <span class="muted">${md?md.toFixed(1):'0.0'} (${qt})</span></div><p class="muted">${(emp.desc||'').substring(0,80)}</p><div class="grid no-click" style="margin-top:12px" onclick="event.stopPropagation()"><button class="btn btn-green" onclick="abrirAvaliar('${emp.id}','${emp.nome.replace(/'/g,"")}')">⭐ Avaliar</button><button class="btn btn-yellow" onclick="pedirSenhaQR('${emp.id}','${emp.nome.replace(/'/g,"")}')">🔒 QR Code</button></div></div>`}).join('');const hid=location.hash.replace('#','');if(hid){const e=empresasCache.find(x=>x.id===hid);if(e) abrirEmpresa(e.id)}}catch(e){sb.textContent='❌ '+e.message}}
+async function carregar(){
+  const sb=document.getElementById('statusBox');const li=document.getElementById('lista');
+  sb.textContent='⏳ Carregando...';
+  try{
+    let snapE=await getDocs(collection(db,'empresas'));
+    let medias={},counts={};
+    try{
+      let snapA=await getDocs(collection(db,'avaliacoes'));
+      snapA.forEach(d=>{const a=d.data();if(!medias[a.empresaId]){medias[a.empresaId]=0;counts[a.empresaId]=0}medias[a.empresaId]+=a.nota;counts[a.empresaId]++});
+      Object.keys(medias).forEach(k=>medias[k]/=counts[k])
+    }catch(e){}
+    if(snapE.empty){sb.textContent='✅ Nenhuma empresa';li.innerHTML='';empresasCache=[];return}
+    sb.textContent=`✅ ${snapE.size} empresa(s)`;
+    empresasCache=[];snapE.forEach(d=>empresasCache.push({id:d.id,...d.data()}));
+    empresasCache.sort((a,b)=>(medias[b.id]||0)-(medias[a.id]||0));
+    li.innerHTML=empresasCache.map(emp=>{
+      const md=medias[emp.id]||0;const qt=counts[emp.id]||0;
+      return `<div class="card" onclick="abrirEmpresa('${emp.id}')">${emp.fotos?.[0]?`<img src="${emp.fotos[0]}" class="thumb" style="margin-bottom:10px">`:''}<h3>${emp.nome}</h3><div style="margin:6px 0"><span class="badge">${emp.cat||'Outros'}</span> <span class="stars">${renderStars(md)}</span> <span class="muted">${md?md.toFixed(1):'0.0'} (${qt})</span></div><p class="muted">${(emp.desc||'').substring(0,80)}</p><div class="grid" style="margin-top:12px" onclick="event.stopPropagation()"><button class="btn btn-green" onclick="abrirAvaliar('${emp.id}','${emp.nome.replace(/'/g,"")}')">⭐ Avaliar</button><button class="btn btn-yellow" onclick="pedirSenhaQR('${emp.id}','${emp.nome.replace(/'/g,"")}')">🔒 QR Code</button></div></div>`
+    }).join('');
+    const hid=location.hash.replace('#','');if(hid){const e=empresasCache.find(x=>x.id===hid);if(e) abrirEmpresa(e.id)}
+  }catch(e){sb.textContent='❌ '+e.message; console.error(e);}
+}
 window.abrirEmpresa=(id)=>{const emp=empresasCache.find(x=>x.id===id);if(!emp)return;const box=document.getElementById('empresaDetalhe');const fotosHtml=(emp.fotos||[]).map(f=>`<img src="${f}" class="thumb-big">`).join('')||'<p class="muted">Sem fotos</p>';box.innerHTML=`${fotosHtml}<h2>${emp.nome}</h2><p style="margin:8px 0"><span class="badge">${emp.cat||''}</span></p><p class="muted" style="margin:10px 0;white-space:pre-wrap">${emp.desc||'Sem descrição'}</p>${emp.whats?`<p><b>Whats:</b> ${emp.whats}</p>`:''}${emp.email?`<p><b>Email:</b> ${emp.email}</p>`:''}${emp.cnpj?`<p><b>CNPJ:</b> ${emp.cnpj}</p>`:''}<div class="grid" style="margin-top:16px"><button class="btn btn-green" onclick="fecharEmpresa(); abrirAvaliar('${emp.id}','${emp.nome.replace(/'/g,"")}')">⭐ Avaliar</button><button class="btn btn-yellow" onclick="pedirSenhaQR('${emp.id}','${emp.nome.replace(/'/g,"")}')">🔒 QR Code</button></div><button class="btn btn-dark" onclick="fecharEmpresa()" style="width:100%;margin-top:12px">Fechar</button>`;document.getElementById('empresaModal').style.display='flex';}
 window.fecharEmpresa=()=>document.getElementById('empresaModal').style.display='none';
 window.pedirSenhaQR=(id,nome)=>{const s=prompt("🔒 Digite a senha de ADMIN para gerar o QR Code:");if(s===null)return;if(s!==SENHA_ADMIN){alert("Senha incorreta!");return;}gerarQR(id,nome);}
-async function carregarRank(){const r=document.getElementById('rankLista');r.innerHTML='Carregando...';try{const se=await getDocs(collection(db,'empresas'));let medias={},counts={};try{const sa=await getDocs(collection(db,'avaliacoes'));sa.forEach(d=>{const a=d.data();if(!medias[a.empresaId]){medias[a.empresaId]=0;counts[a.empresaId]=0}medias[a.empresaId]+=a.nota;counts[a.empresaId]++});Object.keys(medias).forEach(k=>medias[k]/=counts[k])}catch(e){}if(se.empty){r.innerHTML='Nenhuma empresa';return}const lista=[];se.forEach(doc=>{const emp=doc.data();lista.push({id:doc.id,nome:emp.nome,cat:emp.cat||'Outros',media:medias[doc.id]||0,qtd:counts[doc.id]||0})});lista.sort((a,b)=>b.media-a.media);const porCat={};lista.forEach(l=>{if(!porCat[l.cat])porCat[l.cat]=[];porCat[l.cat].push(l)});r.innerHTML=Object.keys(porCat).map(cat=>`<div class="card no-click"><h3>${cat}</h3>${porCat[cat].map((e,i)=>`<p style="margin-top:8px;cursor:pointer" onclick="abrirEmpresa('${e.id}')">${i+1}º ${e.nome} - <span class="stars">${renderStars(e.media)}</span> ${e.media.toFixed(1)} (${e.qtd})</p>`).join('')}</div>`).join('')}catch(e){r.innerHTML='❌ '+e.message}}
+async function carregarRank(){
+  const r=document.getElementById('rankLista');r.innerHTML='⏳ Carregando...';
+  try{
+    const se=await getDocs(collection(db,'empresas'));
+    let medias={},counts={};
+    try{
+      const sa=await getDocs(collection(db,'avaliacoes'));
+      sa.forEach(d=>{const a=d.data();if(!medias[a.empresaId]){medias[a.empresaId]=0;counts[a.empresaId]=0}medias[a.empresaId]+=a.nota;counts[a.empresaId]++});
+      Object.keys(medias).forEach(k=>medias[k]/=counts[k])
+    }catch(e){console.error(e);}
+    if(se.empty){r.innerHTML='Nenhuma empresa';return}
+    const lista=[];se.forEach(doc=>{const emp=doc.data();lista.push({id:doc.id,nome:emp.nome,cat:emp.cat||'Outros',media:medias[doc.id]||0,qtd:counts[doc.id]||0})});
+    lista.sort((a,b)=>b.media-a.media);
+    const porCat={};lista.forEach(l=>{if(!porCat[l.cat])porCat[l.cat]=[];porCat[l.cat].push(l)});
+    r.innerHTML=Object.keys(porCat).map(cat=>`<div class="card" style="cursor:default"><h3>${cat}</h3>${porCat[cat].map((e,i)=>`<p style="margin-top:8px;cursor:pointer" onclick="abrirEmpresa('${e.id}')">${i+1}º ${e.nome} - <span class="stars">${renderStars(e.media)}</span> ${e.media.toFixed(1)} (${e.qtd})</p>`).join('')}</div>`).join('');
+  }catch(e){r.innerHTML='❌ Erro no ranking: '+e.message; console.error(e);}
+}
 window.setNota=n=>{notaAtual=n;document.querySelectorAll('.star-input').forEach((el,i)=>el.classList.toggle('active',i<n))}
-window.abrirAvaliar=async(id,nome)=>{empresaAtiva=id;document.getElementById('avNome').textContent='Avaliar: '+nome;document.getElementById('modalAvaliar').style.display='flex';notaAtual=0;setNota(0);document.getElementById('avQuem').value='';document.getElementById('avEmail').value='';document.getElementById('avComent').value='';document.getElementById('avStatus').textContent='';const la=document.getElementById('listaAv');la.innerHTML='Carregando...';try{const q=query(collection(db,'avaliacoes'),where('empresaId','==',id));const s=await getDocs(q);if(s.empty){la.innerHTML='<p class="muted">Nenhuma avaliação ainda</p>';return}const avs=[];s.forEach(d=>avs.push(d.data()));avs.sort((a,b)=>b.criado-a.criado);la.innerHTML='<h4>Avaliações:</h4>'+avs.map(a=>`<div style="border-top:1px solid #eee;padding:10px 0"><span class="stars">${renderStars(a.nota)}</span> <b>${a.nome}</b><p class="muted">${a.comentario||''}</p></div>`).join('')}catch(e){la.textContent='Erro: '+e.message}}
+window.abrirAvaliar=async(id,nome)=>{
+  empresaAtiva=id;document.getElementById('avNome').textContent='Avaliar: '+nome;
+  document.getElementById('modalAvaliar').style.display='flex';notaAtual=0;setNota(0);
+  document.getElementById('avQuem').value='';document.getElementById('avEmail').value='';
+  document.getElementById('avComent').value='';document.getElementById('avStatus').textContent='';
+  const la=document.getElementById('listaAv');la.innerHTML='Carregando...';
+  try{
+    const q=query(collection(db,'avaliacoes'),where('empresaId','==',id));
+    const s=await getDocs(q);
+    if(s.empty){la.innerHTML='<p class="muted">Nenhuma avaliação ainda</p>';return}
+    const avs=[];s.forEach(d=>avs.push(d.data()));avs.sort((a,b)=>b.criado-a.criado);
+    la.innerHTML='<h4>Avaliações:</h4>'+avs.map(a=>`<div style="border-top:1px solid #eee;padding:10px 0"><span class="stars">${renderStars(a.nota)}</span> <b>${a.nome}</b><p class="muted">${a.comentario||''}</p></div>`).join('')
+  }catch(e){la.textContent='Erro: '+e.message}
+}
 window.fecharAvaliar=()=>document.getElementById('modalAvaliar').style.display='none';
 window.enviarAvaliacao=async()=>{
   if(!notaAtual){alert('Escolha as estrelas! ⭐');return}
@@ -93,11 +150,31 @@ window.enviarAvaliacao=async()=>{
   if(!email||!email.includes('@')){alert('Digite um e-mail válido!');return}
   st.textContent='⏳ Verificando...';
   try{
-    const qCheck=query(collection(db,'avaliacoes'),where('empresaId','==',empresaAtiva),where('email','==',email));
+    const qCheck=query(collection(db,'avaliacoes'),where('empresaId','==',empresaAtiva));
     const snapCheck=await getDocs(qCheck);
-    if(!snapCheck.empty){st.textContent='❌ Esse e-mail já avaliou!';alert('⛔ Esse e-mail já avaliou essa empresa!');return;}
+    let jaAvaliou=false;
+    snapCheck.forEach(d=>{ if((d.data().email||'').toLowerCase()===email) jaAvaliou=true; });
+    if(jaAvaliou){st.textContent='❌ Esse e-mail já avaliou!';alert('⛔ Esse e-mail já avaliou essa empresa!');return;}
     st.textContent='Enviando...';
     await addDoc(collection(db,'avaliacoes'),{empresaId:empresaAtiva,nome,email,nota:notaAtual,comentario,criado:Date.now()});
     st.textContent='✅ Enviado!';setTimeout(()=>{fecharAvaliar();fecharEmpresa();carregar()},1200)
-  }catch(e){
-    st.textContent='❌ '+
+  }catch(e){st.textContent='❌ '+e.message; console.error(e);}
+}
+window.gerarQR=(id,nome)=>{document.getElementById('qrNome').textContent=nome;const link=`https://ianzinpaixao-collab.github.io/Teste2/#${id}`;document.getElementById('qrLink').textContent=link;const b=document.getElementById('qrcode');b.innerHTML='';new QRCode(b,{text:link,width:220,height:220});document.getElementById('qrModal').style.display='flex'}
+window.fecharQR=()=>document.getElementById('qrModal').style.display='none';
+window.baixarQR=()=>{const c=document.querySelector('#qrcode canvas');if(c){const a=document.createElement('a');a.href=c.toDataURL();a.download='qrcode.png';a.click()}}
+window.salvar=async()=>{if(document.getElementById('senha').value!==SENHA_ADMIN){alert('Senha incorreta');return}const nome=document.getElementById('nome').value.trim();if(!nome){alert('Nome obrigatório');return}const btn=document.getElementById('btnSalvar');const st=document.getElementById('saveStatus');btn.disabled=true;btn.textContent='Salvando...';st.textContent='Enviando...';try{await addDoc(collection(db,'empresas'),{nome,cnpj:document.getElementById('cnpj').value,email:document.getElementById('email').value,whats:document.getElementById('whats').value,cat:document.getElementById('cat').value||'Outros',desc:document.getElementById('desc').value,fotos:fotosBase64.slice(0,6),criado:Date.now()});st.textContent='✅ Salvo!';setTimeout(()=>{showTab('empresas');btn.disabled=false;btn.textContent='Salvar empresa';},1200)}catch(e){st.textContent='❌ '+e.message;btn.disabled=false}}
+window.limparAntigas=async()=>{
+  if(document.getElementById('senha').value!==SENHA_ADMIN){alert('Digite a senha admin primeiro!');return}
+  if(!confirm('Apagar TODAS avaliações antigas que estão sem e-mail?')) return;
+  const cs=document.getElementById('cleanStatus');cs.textContent='⏳ Limpando...';
+  try{
+    const snap=await getDocs(collection(db,'avaliacoes'));let apag=0;
+    for(const d of snap.docs){const data=d.data();if(!data.email){await deleteDoc(doc(db,'avaliacoes',d.id));apag++;}}
+    cs.textContent=`✅ ${apag} avaliações antigas apagadas!`;setTimeout(()=>carregar(),1000);
+  }catch(e){cs.textContent='❌ '+e.message}
+}
+carregar();
+</script>
+</body>
+  </html>
