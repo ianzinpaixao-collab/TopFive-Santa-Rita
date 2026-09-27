@@ -2,101 +2,141 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>TopFive Santa Rita - As 5 Melhores Empresas da Cidade</title>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<title>TopFive Santa Rita</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <style>
-:root{--gold:#FFD700;--black:#0a0a0a;--card:#151515;--gray:#888}
-*{margin:0;padding:0;box-sizing:border-box}body{background:#fff;color:#111;font-family:'Inter',sans-serif}
+:root{--gold:#FFD700;--black:#0a0a0a}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Inter',sans-serif;background:#f6f6f6}
 .top{padding:14px 5%;display:flex;justify-content:space-between;align-items:center;background:#0a0a0a;position:sticky;top:0;z-index:99;border-bottom:2px solid var(--gold)}
-.logo{font-family:'Oswald';font-size:22px;color:#fff;letter-spacing:2px} .logo span{color:var(--gold)}
-.btn{background:var(--gold);color:#000;padding:12px 24px;border-radius:8px;font-weight:800;text-decoration:none;display:inline-block;border:0;cursor:pointer}
-.btn-black{background:#000;color:var(--gold);border:1px solid var(--gold)}
-.hero{background:#0a0a0a;color:#fff;padding:50px 5% 40px;text-align:center}
-.hero h1{font-family:'Oswald';font-size:48px;line-height:.95;text-transform:uppercase;max-width:700px;margin:0 auto}
-.hero h1 em{color:var(--gold);font-style:normal}
-.hero p{color:#999;margin:18px auto;max-width:600px;font-size:16px;line-height:1.5}
-.badge{background:#1a1a1a;border:1px solid #222;padding:6px 12px;border-radius:20px;font-size:11px;color:#aaa;display:inline-block;margin:4px}
-.section{padding:40px 5%}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.card{background:#fff;border:1px solid #e5e5e5;border-radius:16px;padding:18px;text-align:center}
-.ranking{background:#f6f6f6}
-.emp-card{background:#fff;border-radius:16px;overflow:hidden;border:1px solid #e5e5e5;display:flex;flex-direction:column}
-.emp-card img{width:100%;height:160px;object-fit:cover}
-.emp-info{padding:14px}
-.stars{color:#ffb800}
-.price{padding:40px 5%;background:#0a0a0a;color:#fff;text-align:center}
-.plan{background:#151515;border:1px solid #222;border-radius:16px;padding:24px;max-width:380px;margin:20px auto}
-.plan b{font-family:'Oswald';font-size:28px}
-.plan ul{text-align:left;margin:16px 0;color:#aaa;font-size:14px;line-height:1.8;list-style:none}
-.plan ul li::before{content:'✓ ';color:var(--gold)}
-@media(max-width:800px){.hero h1{font-size:32px}.grid3{grid-template-columns:1fr}}
+.logo{font-family:'Oswald';font-size:22px;color:#fff}.logo span{color:var(--gold)}
+.btn{background:var(--gold);color:#000;padding:12px 20px;border-radius:8px;font-weight:800;border:0;cursor:pointer}
+.hero{background:#0a0a0a;color:#fff;padding:40px 5%;text-align:center}
+.hero h1{font-family:'Oswald';font-size:42px;text-transform:uppercase;line-height:.95}.hero h1 em{color:var(--gold);font-style:normal}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:20px 5%}
+.card{background:#fff;border-radius:16px;overflow:hidden;border:1px solid #e5e5e5}
+.card img{width:100%;height:160px;object-fit:cover}
+.info{padding:12px}
+.badge{background:#111;color:#fff;padding:4px 10px;border-radius:20px;font-size:10px}
+.stars{color:#ffb800;font-size:13px}
+.modal{position:fixed;inset:0;background:#000c;display:none;align-items:center;justify-content:center;z-index:999;padding:10px}
+.modal.open{display:flex}
+.box{background:#fff;border-radius:16px;padding:20px;width:100%;max-width:480px;max-height:90vh;overflow:auto}
+.box input,.box select,.box textarea{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;margin:6px 0}
+@media(max-width:800px){.grid{grid-template-columns:1fr}.hero h1{font-size:30px}}
 </style>
 </head>
 <body>
 
 <div class="top">
-<div class="logo">TOP<span>FIVE</span> <small style="font-size:10px;color:#666"> SANTA RITA</small></div>
-<a href="#planos" class="btn" style="padding:8px 16px;font-size:13px">Cadastrar Minha Empresa</a>
+<div class="logo">TOP<span>FIVE</span></div>
+<button class="btn" onclick="openCad()">Cadastrar Minha Empresa</button>
 </div>
 
 <div class="hero">
-<div class="badge" style="background:#FFD70022;color:#FFD700;border-color:#FFD70044">🏆 RANKING OFICIAL 2026</div>
 <h1>AS 5 MELHORES EMPRESAS DE <em>CADA SETOR</em> DE SANTA RITA</h1>
-<p>O ranking oficial votado pelo povo. Quem está no Top 5 ganha o Selo de Empresa Verificada e mais clientes.</p>
-<a href="#planos" class="btn" style="padding:18px 32px;margin-top:10px">QUERO MINHA EMPRESA NO TOP 5 →</a>
+<p style="color:#888;margin-top:10px">Ranking oficial votado pelo povo</p>
 </div>
 
-<div class="section ranking" id="empresas">
-<h2 style="font-family:'Oswald';font-size:32px">EMPRESA EM DESTAQUE ESSA SEMANA</h2>
+<div class="grid" id="listaEmpresas"></div>
 
-<div class="grid3" style="margin-top:20px">
-
-<div class="emp-card">
-<img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?w=500">
-<div class="emp-info">
-<div class="badge">🥇 1º LUGAR - CONFEITARIA</div>
-<h3>ArtBuffet</h3>
-<p class="stars">★★★★★ 4.5 (2 avaliações)</p>
-<p style="color:#666;font-size:12px;margin-top:4px">📍 Santa Rita - MA • Venda de Serviços</p>
-<a href="#" class="btn btn-black" style="width:100%;margin-top:10px;padding:10px">AVALIAR ⭐</a>
-</div>
-</div>
-
-<div class="emp-card" style="border:2px dashed #FFD700;background:#FFFBEB">
-<div style="padding:40px 14px;text-align:center">
-<div style="font-size:40px">👑</div>
-<h3>SUA EMPRESA AQUI?</h3>
-<p style="color:#666;font-size:13px;margin:8px 0">Ainda tem 4 vagas no Top 5 de Confeitaria e Doces.</p>
-<a href="#planos" class="btn" style="width:100%;margin-top:10px">QUERO ENTRAR</a>
+<!-- MODAL CADASTRO -->
+<div class="modal" id="modalCad">
+<div class="box">
+<h2 style="font-family:'Oswald'">CADASTRAR EMPRESA</h2>
+<p style="font-size:12px;color:#888">Preencha tudo para entrar no ranking</p>
+<input id="nome" placeholder="Nome da empresa *">
+<input id="cnpj" placeholder="CNPJ da empresa *">
+<select id="categoria"><option value="">Categoria *</option><option>Confeitaria</option><option>Barbearia</option><option>Restaurante</option><option>Loja</option><option>Serviços</option></select>
+<textarea id="desc" placeholder="Descrição do que sua empresa faz"></textarea>
+<label style="font-size:12px;font-weight:700">Fotos da empresa (até 3)</label>
+<input type="file" id="fotos" accept="image/*" multiple>
+<input type="password" id="senhaAdmin" placeholder="Senha de Administrador * (só você e eu sabemos)">
+<input type="password" id="senhaMestre" placeholder="Confirme sua Senha Mestre para SALVAR">
+<p style="font-size:10px;color:red">Senha mestra padrão: topfive2026 - troque depois no código</p>
+<button class="btn" style="width:100%;margin-top:10px" onclick="salvarEmpresa()">SALVAR EMPRESA NO SITE</button>
+<button onclick="closeCad()" style="width:100%;margin-top:8px;padding:10px;border:0;background:#eee;border-radius:8px">Cancelar</button>
 </div>
 </div>
 
-<div class="emp-card" style="border:2px dashed #ddd;background:#fafafa">
-<div style="padding:40px 14px;text-align:center">
-<div style="font-size:40px">✂️</div>
-<h3>CATEGORIA BARBEARIA</h3>
-<p style="color:#666;font-size:13px;margin:8px 0">Nenhuma empresa no Top 5 ainda. Seja o primeiro!</p>
-<a href="#planos" class="btn btn-black" style="width:100%;margin-top:10px">OCUPAR VAGA</a>
+<!-- MODAL QR CODE -->
+<div class="modal" id="modalQR">
+<div class="box" style="text-align:center">
+<h2>GERAR QR CODE</h2>
+<p style="font-size:12px;color:#888">Esse QR leva direto pra avaliação da empresa</p>
+<div id="qrcode" style="display:flex;justify-content:center;margin:20px 0"></div>
+<input type="password" id="senhaQR" placeholder="Digite a SENHA MESTRA para gerar">
+<button class="btn" style="width:100%" onclick="gerarQR()">GERAR QR CODE</button>
+<button onclick="document.getElementById('modalQR').classList.remove('open')" style="width:100%;margin-top:8px;padding:10px;border:0;background:#eee;border-radius:8px">Fechar</button>
 </div>
 </div>
 
-</div>
-</div>
+<script>
+const SENHA_MESTRA = "topfive2026"; // <--- TROQUE AQUI SUA SENHA QUE SÓ VOCÊ SABE
+let empresaAtualQR = "";
+let empresas = JSON.parse(localStorage.getItem("topfive_empresas") || "[]");
 
-<div class="price" id="planos">
-<h2 style="font-family:'Oswald';font-size:36px">QUANTO CUSTA ESTAR NO <span style="color:var(--gold)">TOP 5?</span></h2>
-<div class="plan">
-<b style="color:var(--gold)">PLANO TOP 5</b><br>
-<span style="font-size:36px;font-weight:800">R$97</span><span style="color:#888">/mês</span>
-<ul>
-<li>Página exclusiva com WhatsApp e Instagram</li>
-<li>Selo "Empresa Verificada TopFive"</li>
-<li>QR Code pra coletar avaliações na loja</li>
-<li>Aparece no Top 5 da sua categoria</li>
-</ul>
-<a href="https://wa.me/559891648974?text=Quero%20minha%20empresa%20na%20TopFive" class="btn" style="width:100%;padding:16px">QUERO ENTRAR NO TOP 5 →</a>
-</div>
-</div>
+// Se for primeira vez, já começa com ArtBuffet
+if(empresas.length===0){
+  empresas = [{nome:"ArtBuffet",cnpj:"00.000.000/0001-00",categoria:"Confeitaria",desc:"Venda de Serviços",foto:"https://images.unsplash.com/photo-1551024506-0bccd828d307?w=500",avaliacoes:2,nota:4.5}];
+  localStorage.setItem("topfive_empresas", JSON.stringify(empresas));
+}
 
+function render(){
+  const lista = document.getElementById("listaEmpresas");
+  lista.innerHTML = empresas.map((e,i)=>`
+    <div class="card">
+      <img src="${e.foto}">
+      <div class="info">
+        <span class="badge">1º LUGAR - ${e.categoria.toUpperCase()}</span>
+        <h3 style="margin:6px 0">${e.nome}</h3>
+        <p class="stars">★★★★★ ${e.nota} (${e.avaliacoes} avaliações)</p>
+        <p style="font-size:11px;color:#666">${e.desc} • CNPJ: ${e.cnpj}</p>
+        <div style="display:flex;gap:6px;margin-top:10px">
+          <button class="btn" style="flex:1;padding:8px;font-size:12px;background:#111;color:var(--gold)" onclick="avaliar(${i})">AVALIAR ⭐</button>
+          <button class="btn" style="flex:1;padding:8px;font-size:12px" onclick="abrirQR('${e.nome}')">QR CODE</button>
+        </div>
+      </div>
+    </div>
+  `).join("") + `
+    <div class="card" style="border:2px dashed #FFD700;background:#FFFBEB;display:flex;align-items:center;justify-content:center;padding:30px;text-align:center">
+      <div><div style="font-size:36px">👑</div><h3>SUA EMPRESA AQUI?</h3><p style="font-size:12px;color:#666">Ainda tem vagas no Top 5</p><button class="btn" style="margin-top:10px" onclick="openCad()">QUERO ENTRAR</button></div>
+    </div>`;
+}
+render();
+
+function openCad(){document.getElementById("modalCad").classList.add("open")}
+function closeCad(){document.getElementById("modalCad").classList.remove("open")}
+
+function salvarEmpresa(){
+  const nome=document.getElementById("nome").value;
+  const cnpj=document.getElementById("cnpj").value;
+  const cat=document.getElementById("categoria").value;
+  const desc=document.getElementById("desc").value;
+  const senhaM=document.getElementById("senhaMestre").value;
+  const file=document.getElementById("fotos").files[0];
+
+  if(!nome||!cnpj||!cat){alert("Preencha nome, CNPJ e categoria");return}
+  if(senhaM!==SENHA_MESTRA){alert("Senha mestra errada! Só o administrador pode salvar.");return}
+
+  let fotoUrl = "https://images.unsplash.com/photo-1551024506-0bccd828d307?w=500";
+  if(file){ fotoUrl = URL.createObjectURL(file); }
+
+  empresas.push({nome,cnpj,categoria:cat,desc,foto:fotoUrl,avaliacoes:0,nota:5.0});
+  localStorage.setItem("topfive_empresas", JSON.stringify(empresas));
+  closeCad(); render(); alert("Empresa salva com sucesso!");
+}
+
+function abrirQR(nome){ empresaAtualQR=nome; document.getElementById("qrcode").innerHTML=""; document.getElementById("modalQR").classList.add("open"); }
+function gerarQR(){
+  if(document.getElementById("senhaQR").value!==SENHA_MESTRA){alert("Senha mestra errada!");return}
+  document.getElementById("qrcode").innerHTML="";
+  new QRCode(document.getElementById("qrcode"), {
+    text: `https://ianzinpaixao-collab.github.io/TopFive-Santa-Rita/?avaliar=${encodeURIComponent(empresaAtualQR)}`,
+    width:200,height:200
+  });
+}
+function avaliar(i){ empresas[i].avaliacoes++; localStorage.setItem("topfive_empresas", JSON.stringify(empresas)); render(); alert("Obrigado por avaliar "+empresas[i].nome+"! ⭐"); }
+</script>
 </body>
 </html>
