@@ -8,27 +8,21 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}body{font-family:'Inter',sans-serif;background:#f2f2f2}
 .top{ background:#0f0f0f; padding:10px 12px; display:flex; align-items:center; gap:8px; position:sticky; top:0; z-index:99}
-.logo{color:#FFD700;font-weight:800;font-size:18px}
-.logo b{color:#fff}
+.logo{color:#FFD700;font-weight:800;font-size:18px}.logo b{color:#fff}
 .pill{padding:6px 12px;border-radius:20px;font-size:12px;font-weight:600;border:0;cursor:pointer}
-.pill-emp{background:#2a2a2a;color:#fff}
-.pill-rank{background:#FFD700;color:#000}
-.pill-cad{background:#3b82f6;color:#fff}
+.pill-emp{background:#2a2a2a;color:#fff}.pill-rank{background:#FFD700;color:#000}.pill-cad{background:#3b82f6;color:#fff}
 .count{margin:12px;background:#fff;padding:10px 14px;border-radius:10px;font-size:13px;border:1px solid #e5e5e5}
-.card{background:#fff;border-radius:16px;overflow:hidden;margin:0 12px;border:1px solid #e5e5e5;box-shadow:0 2px 8px #0001}
+.card{background:#fff;border-radius:16px;overflow:hidden;margin:0 12px 12px 12px;border:1px solid #e5e5e5}
 .card img{width:100%;height:180px;object-fit:cover}
-.card-info{padding:10px 12px}
-.stars{color:#FFB800;font-size:12px}
+.card-info{padding:10px 12px}.stars{color:#FFB800;font-size:12px}
 .btns{display:flex;gap:8px;margin-top:10px}
 .btn{flex:1;padding:10px;border-radius:20px;border:0;font-weight:700;font-size:12px;cursor:pointer}
-.btn-av{background:#22c55e;color:#fff}
-.btn-qr{background:#FFD700;color:#000}
+.btn-av{background:#22c55e;color:#fff}.btn-qr{background:#FFD700;color:#000}
+.empty{text-align:center;padding:60px 20px;background:#fff;margin:12px;border-radius:16px;border:2px dashed #FFD700}
 .modal{position:fixed;inset:0;background:#000a;display:none;align-items:center;justify-content:center;z-index:999;padding:12px}
-.modal.open{display:flex}
-.box{background:#fff;border-radius:16px;padding:18px;width:100%;max-width:500px;max-height:95vh;overflow:auto}
-.box input,.box select,.box textarea{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:6px 0;font-size:14px}
-.preview{display:flex;gap:6px;flex-wrap:wrap}
-.preview img{width:60px;height:60px;object-fit:cover;border-radius:8px}
+.modal.open{display:flex}.box{background:#fff;border-radius:16px;padding:18px;width:100%;max-width:500px;max-height:95vh;overflow:auto}
+.box input,.box select,.box textarea{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:6px 0}
+.preview{display:flex;gap:6px;flex-wrap:wrap}.preview img{width:60px;height:60px;object-fit:cover;border-radius:8px}
 .page{display:none}.page.open{display:block}
 </style>
 </head>
@@ -42,7 +36,7 @@
 </div>
 
 <div id="home">
-<div class="count">✅ <span id="qtd">1</span> empresa(s)</div>
+<div class="count">✅ <span id="qtd">0</span> empresa(s)</div>
 <div id="lista"></div>
 </div>
 
@@ -51,27 +45,23 @@
 <div id="detalhe" style="margin-top:12px"></div>
 </div>
 
-<!-- MODAL CADASTRO ANTIGO COMPLETO -->
 <div class="modal" id="modalCad">
 <div class="box">
 <h3>Cadastrar Empresa</h3>
-<p style="font-size:12px;color:#666;margin-bottom:8px">Preencha com dados reais</p>
-<input id="nome" placeholder="Nome da Empresa * ex: Artbuffet">
-<input id="cnpj" placeholder="CNPJ Verdadeiro * ex: 12.345.678/0001-90">
-<select id="cat"><option value="">Categoria *</option><option selected>Venda de Serviços</option><option>Confeitaria</option><option>Barbearia</option><option>Restaurante</option><option>Moda</option></select>
-<textarea id="desc" placeholder="Descrição - Serviços diversos *">Serviços diversos</textarea>
-<label style="font-size:12px;font-weight:700">Fotos da empresa (pode escolher várias)</label>
+<input id="nome" placeholder="Nome da Empresa *">
+<input id="cnpj" placeholder="CNPJ Verdadeiro *">
+<select id="cat"><option value="">Categoria *</option><option>Venda de Serviços</option><option>Confeitaria</option><option>Barbearia</option><option>Restaurante</option><option>Moda</option></select>
+<textarea id="desc" placeholder="Descrição *"></textarea>
+<label style="font-size:12px;font-weight:700">Fotos (até 5)</label>
 <input type="file" id="fotos" accept="image/*" multiple onchange="previewF()">
 <div class="preview" id="prev"></div>
 <input type="password" id="senha" placeholder="Senha de Administrador *">
-<p style="font-size:11px;color:#888">Senha atual: <b>107020</b></p>
-
+<p style="font-size:11px;color:#888">Senha: <b>107020</b></p>
 <div id="areaQR" style="display:none;text-align:center;margin-top:12px;border-top:1px solid #eee;padding-top:10px">
-<p style="font-weight:700;font-size:13px">QR Code gerado! Leva direto pra página da empresa:</p>
+<p style="font-weight:700;font-size:13px">QR Code gerado:</p>
 <div id="qrcode" style="display:flex;justify-content:center;margin:10px 0"></div>
 <p id="linkQR" style="font-size:11px;color:#666;word-break:break-all"></p>
 </div>
-
 <button style="width:100%;padding:14px;background:#FFD700;border:0;border-radius:10px;font-weight:800;margin-top:10px" onclick="salvar()">SALVAR E GERAR QR CODE</button>
 <button style="width:100%;padding:10px;background:#eee;border:0;border-radius:10px;margin-top:6px" onclick="closeCad()">Cancelar</button>
 </div>
@@ -80,19 +70,9 @@
 <script>
 const SENHA_ADM = "107020";
 let tempFotos = [];
-let empresas = JSON.parse(localStorage.getItem("topfive_old")||"null");
-
-if(!empresas){
-empresas = [{
-nome:"Artbuffet",
-cnpj:"42.189.673/0001-05",
-categoria:"Venda de Serviços",
-desc:"Serviços diversos",
-fotos:["https://i.imgur.com/8Km9tLL.jpeg","https://images.unsplash.com/photo-1551024506-0bccd828d307?w=600","https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600"],
-avaliacoes:[{email:"cliente1@gmail.com",nota:5,coment:"Melhor da cidade!"},{email:"cliente2@gmail.com",nota:4,coment:"Muito bom"}]
-}];
-localStorage.setItem("topfive_old", JSON.stringify(empresas));
-}
+// BANCO NOVO ZERADO - chave diferente pra não puxar a Artbuffet antiga
+let empresas = JSON.parse(localStorage.getItem("topfive_final_v1")||"[]");
+localStorage.setItem("topfive_final_v1", JSON.stringify(empresas));
 
 function previewF(){
 let files=document.getElementById("fotos").files;
@@ -102,41 +82,29 @@ for(let f of files){ let u=URL.createObjectURL(f); tempFotos.push(u); let im=doc
 
 function render(){
 document.getElementById("qtd").innerText=empresas.length;
+if(empresas.length===0){
+document.getElementById("lista").innerHTML=`<div class="empty"><div style="font-size:48px">🏆</div><h3>Nenhuma empresa cadastrada ainda</h3><p style="font-size:13px;color:#666;margin:8px 0">Clique em Cadastrar e use a senha 107020 para adicionar a primeira</p><button class="pill pill-cad" onclick="openCad()">📋 Cadastrar Primeira Empresa</button></div>`;
+return;
+}
 document.getElementById("lista").innerHTML=empresas.map((e,i)=>{
-let media = (e.avaliacoes.reduce((s,a)=>s+a.nota,0)/e.avaliacoes.length).toFixed(1);
-return `
-<div class="card">
-<img src="${e.fotos[0]}" onclick="abrir(${i})">
-<div class="card-info">
-<b style="font-size:14px">${e.nome}</b><br>
-<span style="font-size:11px;background:#eee;padding:2px 6px;border-radius:10px">${e.categoria}</span>
-<span class="stars">★★★★★ ${media} (${e.avaliacoes.length})</span>
-<p style="font-size:11px;color:#666">${e.desc}</p>
-<div class="btns">
-<button class="btn btn-av" onclick="abrir(${i})">⭐ Avaliar</button>
-<button class="btn btn-qr" onclick="gerarQRAntigo('${e.nome}')">📍 QR Code</button>
-</div>
-</div>
-</div>`
+let media = e.avaliacoes.length? (e.avaliacoes.reduce((s,a)=>s+a.nota,0)/e.avaliacoes.length).toFixed(1) : "5.0";
+return `<div class="card"><img src="${e.fotos[0]}" onclick="abrir(${i})"><div class="card-info"><b>${e.nome}</b><br><span style="font-size:11px;background:#eee;padding:2px 6px;border-radius:10px">${e.categoria}</span> <span class="stars">★★★★★ ${media} (${e.avaliacoes.length})</span><p style="font-size:11px;color:#666">${e.desc}</p><div class="btns"><button class="btn btn-av" onclick="abrir(${i})">⭐ Avaliar</button><button class="btn btn-qr" onclick="gerarQRAntigo('${e.nome}')">📍 QR Code</button></div></div></div>`
 }).join("");
 }
 render();
-
 function openCad(){document.getElementById("modalCad").classList.add("open")}
 function closeCad(){document.getElementById("modalCad").classList.remove("open"); document.getElementById("areaQR").style.display="none"; document.getElementById("qrcode").innerHTML="";}
-
 function salvar(){
 let nome=document.getElementById("nome").value.trim();
 let cnpj=document.getElementById("cnpj").value.trim();
 let cat=document.getElementById("cat").value;
 let desc=document.getElementById("desc").value.trim();
 let senha=document.getElementById("senha").value;
-if(!nome||!cnpj||!cat){alert("Preencha nome, CNPJ e categoria");return}
-if(senha!==SENHA_ADM){alert("Senha de administrador errada! Use 107020");return}
-if(cnpj.length<14){alert("CNPJ inválido");return}
-let fotos = tempFotos.length?tempFotos:["https://i.imgur.com/8Km9tLL.jpeg"];
+if(!nome||!cnpj||!cat){alert("Preencha tudo");return}
+if(senha!==SENHA_ADM){alert("Senha errada!");return}
+let fotos = tempFotos.length?tempFotos:["https://images.unsplash.com/photo-1551024506-0bccd828d307?w=600"];
 empresas.push({nome,cnpj,categoria:cat,desc,fotos,avaliacoes:[]});
-localStorage.setItem("topfive_old", JSON.stringify(empresas));
+localStorage.setItem("topfive_final_v1", JSON.stringify(empresas));
 let link = `https://ianzinpaixao-collab.github.io/TopFive-Santa-Rita/?empresa=${encodeURIComponent(nome)}`;
 document.getElementById("areaQR").style.display="block";
 document.getElementById("qrcode").innerHTML="";
@@ -144,56 +112,10 @@ new QRCode(document.getElementById("qrcode"),{text:link,width:180,height:180});
 document.getElementById("linkQR").innerText=link;
 render();
 }
-
-function gerarQRAntigo(nome){
-openCad();
-let link = `https://ianzinpaixao-collab.github.io/TopFive-Santa-Rita/?empresa=${encodeURIComponent(nome)}`;
-document.getElementById("areaQR").style.display="block";
-document.getElementById("qrcode").innerHTML="";
-setTimeout(()=>{new QRCode(document.getElementById("qrcode"),{text:link,width:180,height:180});},200);
-document.getElementById("linkQR").innerText=link;
-}
-
-function abrir(i){
-let e=empresas[i];
-let media = e.avaliacoes.length? (e.avaliacoes.reduce((s,a)=>s+a.nota,0)/e.avaliacoes.length).toFixed(1):"5.0";
-document.getElementById("home").style.display="none";
-document.getElementById("pageEmp").classList.add("open");
-document.getElementById("detalhe").innerHTML=`
-<div class="card">
-<img src="${e.fotos[0]}">
-<div class="card-info">
-<h2>${e.nome}</h2>
-<p style="font-size:12px;color:#666">CNPJ: ${e.cnpj} • ${e.categoria}</p>
-<p class="stars">★★★★★ ${media} (${e.avaliacoes.length} avaliações)</p>
-<p style="margin:8px 0">${e.desc}</p>
-<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:10px 0">${e.fotos.map(f=>`<img src="${f}" style="width:100%;height:80px;object-fit:cover;border-radius:8px">`).join("")}</div>
-<hr style="margin:12px 0">
-<h4>Avaliar (só 1 por email - anti fraude)</h4>
-<input id="emailA" placeholder="Seu email" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;margin:6px 0">
-<select id="notaA" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px"><option value="5">★★★★★ 5</option><option value="4">★★★★ 4</option><option value="3">★★★ 3</option><option value="2">★★ 2</option><option value="1">★ 1</option></select>
-<textarea id="comentA" placeholder="Seu comentário" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;margin:6px 0"></textarea>
-<button class="btn btn-av" style="width:100%" onclick="avaliar(${i})">Enviar Avaliação</button>
-<div style="margin-top:12px">${e.avaliacoes.map(a=>`<div style="background:#f9f9f9;padding:8px;border-radius:8px;margin:4px 0"><b style="font-size:12px">${a.email}</b> <span class="stars">${"★".repeat(a.nota)}</span><p style="font-size:12px">${a.coment}</p></div>`).join("")}</div>
-</div>
-</div>
-`;
-}
-function avaliar(i){
-let email=document.getElementById("emailA").value.toLowerCase().trim();
-let nota=parseInt(document.getElementById("notaA").value);
-let coment=document.getElementById("comentA").value.trim();
-if(!email.includes("@")){alert("Email inválido");return}
-if(empresas[i].avaliacoes.some(a=>a.email===email)){alert("Esse email já avaliou essa empresa!");return}
-empresas[i].avaliacoes.push({email,nota,coment});
-localStorage.setItem("topfive_old", JSON.stringify(empresas));
-abrir(i); render();
-}
+function gerarQRAntigo(nome){openCad(); let link=`https://ianzinpaixao-collab.github.io/TopFive-Santa-Rita/?empresa=${encodeURIComponent(nome)}`; document.getElementById("areaQR").style.display="block"; document.getElementById("qrcode").innerHTML=""; setTimeout(()=>{new QRCode(document.getElementById("qrcode"),{text:link,width:180,height:180});},200); document.getElementById("linkQR").innerText=link;}
+function abrir(i){let e=empresas[i]; let media = e.avaliacoes.length? (e.avaliacoes.reduce((s,a)=>s+a.nota,0)/e.avaliacoes.length).toFixed(1):"5.0"; document.getElementById("home").style.display="none"; document.getElementById("pageEmp").classList.add("open"); document.getElementById("detalhe").innerHTML=`<div class="card"><img src="${e.fotos[0]}"><div class="card-info"><h2>${e.nome}</h2><p style="font-size:12px;color:#666">CNPJ: ${e.cnpj} • ${e.categoria}</p><p class="stars">★★★★★ ${media} (${e.avaliacoes.length})</p><p style="margin:8px 0">${e.desc}</p><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:10px 0">${e.fotos.map(f=>`<img src="${f}" style="width:100%;height:80px;object-fit:cover;border-radius:8px">`).join("")}</div><hr style="margin:12px 0"><h4>Avaliar (só 1 por email)</h4><input id="emailA" placeholder="Seu email" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;margin:6px 0"><select id="notaA" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px"><option value="5">★★★★★ 5</option><option value="4">★★★★ 4</option><option value="3">★★★ 3</option><option value="2">★★ 2</option><option value="1">★ 1</option></select><textarea id="comentA" placeholder="Comentário" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;margin:6px 0"></textarea><button class="btn btn-av" style="width:100%" onclick="avaliar(${i})">Enviar Avaliação</button><div style="margin-top:12px">${e.avaliacoes.map(a=>`<div style="background:#f9f9f9;padding:8px;border-radius:8px;margin:4px 0"><b style="font-size:12px">${a.email}</b> <span class="stars">${"★".repeat(a.nota)}</span><p style="font-size:12px">${a.coment}</p></div>`).join("")}</div></div></div>`;}
+function avaliar(i){let email=document.getElementById("emailA").value.toLowerCase().trim(); let nota=parseInt(document.getElementById("notaA").value); let coment=document.getElementById("comentA").value.trim(); if(!email.includes("@")){alert("Email inválido");return} if(empresas[i].avaliacoes.some(a=>a.email===email)){alert("Esse email já avaliou!");return} empresas[i].avaliacoes.push({email,nota,coment}); localStorage.setItem("topfive_final_v1", JSON.stringify(empresas)); abrir(i); render();}
 function showHome(){document.getElementById("home").style.display="block";document.getElementById("pageEmp").classList.remove("open");}
-window.onload=()=>{
-let p=new URLSearchParams(location.search);
-if(p.get("empresa")){let idx=empresas.findIndex(e=>e.nome===p.get("empresa")); if(idx>=0) abrir(idx);}
-}
 </script>
 </body>
 </html>
