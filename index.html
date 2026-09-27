@@ -25,7 +25,10 @@
 .rank-item{display:flex;align-items:center;gap:10px;background:#fff;margin:8px 12px;padding:10px;border-radius:12px;border:1px solid #eee}
 .rank-pos{font-size:20px;font-weight:800;width:36px;text-align:center}
 .gal{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.gal img{width:70px;height:70px;border-radius:10px;object-fit:cover;border:2px solid transparent;cursor:pointer}.gal img.active{border-color:#FFD700}
-.star-rate{font-size:32px;cursor:pointer;display:flex;gap:4px}.star-rate span{color:#ddd;transition:0.2s}.star-rate span.on{color:#FFB800}
+.star-rate{font-size:36px;cursor:pointer;display:flex;gap:4px}.star-rate span{color:#ddd;transition:0.2s}.star-rate span.on{color:#FFB800}
+.form-card{background:#fafafa;border:1px solid #eee;border-radius:14px;padding:14px;margin-top:12px}
+.coment-card{background:#fff;border:1px solid #eee;border-radius:14px;padding:12px;margin:8px 0;display:flex;gap:10px}
+.avatar{width:40px;height:40px;border-radius:50%;background:#FFD700;color:#000;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;flex-shrink:0}
 </style>
 </head>
 <body>
@@ -55,7 +58,6 @@ async function carregarNuvem(){
 }
 carregarNuvem();
 function calculaMedia(e){ if(!e.avaliacoes||e.avaliacoes.length===0) return null; return (e.avaliacoes.reduce((s,a)=>s+a.nota,0)/e.avaliacoes.length); }
-function estrelasHTML(media){ if(media===null) return `<span style="color:#999">☆☆☆☆☆ Sem avaliações</span>`; let cheias=Math.round(media); return `${"★".repeat(cheias)}${"☆".repeat(5-cheias)} ${media.toFixed(1)} (${media?empresas.find(x=>x._id)?.avaliacoes?.length||"":0})`; }
 window.limparDuplicadas=async()=>{ if(!confirm("Apagar duplicadas?")) return; const snap = await getDocs(collection(db, "empresas")); let mapa={}; for(let d of snap.docs){ let e=d.data(); let k=e.nome.toLowerCase().trim(); if(!mapa[k]){ mapa[k]=d.id; } else { await deleteDoc(doc(db,"empresas",d.id)); } } alert("Limpo!"); carregarNuvem(); }
 window.previewF=function(){ let files=document.getElementById("fotos").files; if(files.length>5){alert("Máximo 5 fotos!"); return;} tempFotos=[];document.getElementById("prev").innerHTML=""; for(let f of files){ let r=new FileReader(); r.onload=ev=>{ let img=new Image(); img.onload=()=>{ let c=document.createElement("canvas"); let max=600; let w=img.width,h=img.height; if(w>h){if(w>max){h*=max/w;w=max}}else{if(h>max){w*=max/h;h=max}} c.width=w;c.height=h; c.getContext("2d").drawImage(img,0,0,w,h); let small=c.toDataURL("image/jpeg",0.35); tempFotos.push(small); let im=document.createElement("img"); im.src=small; document.getElementById("prev").appendChild(im); }; img.src=ev.target.result; }; r.readAsDataURL(f); } }
 window.render=function(){
@@ -69,13 +71,31 @@ window.render=function(){
 }
 window.openCad=()=>document.getElementById("modalCad").classList.add("open"); window.closeCad=()=>{document.getElementById("modalCad").classList.remove("open");document.getElementById("areaQR").style.display="none";document.getElementById("qrcode").innerHTML="";}; window.closeQR=()=>{document.getElementById("modalQR").classList.remove("open");document.getElementById("areaQR2").style.display="none";document.getElementById("qrcode2").innerHTML="";}; window.pedirSenhaQR=n=>{empresaQRAtual=n;document.getElementById("modalQR").classList.add("open");}; window.confirmarQR=()=>{if(document.getElementById("senhaQR").value!==SENHA_ADM){alert("Senha incorreta!");return;}let link=`https://ianzinpaixao-collab.github.io/TopFive-Santa-Rita/?empresa=${encodeURIComponent(empresaQRAtual)}`;document.getElementById("areaQR2").style.display="block";document.getElementById("qrcode2").innerHTML="";new QRCode(document.getElementById("qrcode2"),{text:link,width:200,height:200});document.getElementById("linkQR2").innerText=link;};
 window.salvarNuvem=async()=>{ let nome=document.getElementById("nome").value.trim(); let cnpj=document.getElementById("cnpj").value.trim(); let cat=document.getElementById("cat").value; let desc=document.getElementById("desc").value.trim(); let senha=document.getElementById("senha").value; if(!nome||!cnpj||!cat||!desc){alert("Preencha todos *");return} if(senha!==SENHA_ADM){alert("Senha incorreta!");return} if(tempFotos.length===0){alert("Escolha 1 foto");return} let fotos=tempFotos.slice(0,5); let btn=document.getElementById("btnSalvar"); btn.innerText="Salvando..."; btn.disabled=true; try{ await addDoc(collection(db,"empresas"),{nome,cnpj,categoria:cat,desc,fotos,avaliacoes:[]}); let link=`https://ianzinpaixao-collab.github.io/TopFive-Santa-Rita/?empresa=${encodeURIComponent(nome)}`; document.getElementById("areaQR").style.display="block"; document.getElementById("qrcode").innerHTML=""; new QRCode(document.getElementById("qrcode"),{text:link,width:200,height:200}); document.getElementById("linkQR").innerText=link; btn.innerText="SALVO! ✅"; await carregarNuvem(); }catch(e){ alert("Erro: "+e.message); btn.innerText="SALVAR"; btn.disabled=false; } };
-window.setNota=n=>{ notaAtual=n; document.querySelectorAll("#estrelasClick span").forEach((s,i)=>{ s.className = i < n? "on" : ""; }); document.getElementById("textoNota").innerText = n+" estrelas"; }
+window.setNota=n=>{ notaAtual=n; document.querySelectorAll("#estrelasClick span").forEach((s,i)=>{ s.className = i < n? "on" : ""; }); document.getElementById("textoNota").innerText = n+" "+(n===1?"estrela":"estrelas"); }
 window.abrir=i=>{
   notaAtual=5;
   let e=empresas[i]; let media=calculaMedia(e);
   let mediaTexto = media===null? `<span style="color:#999;font-size:14px">Sem avaliações ainda - seja o primeiro!</span>` : `<span class="stars" style="font-size:16px">${"★".repeat(Math.round(media))}${"☆".repeat(5-Math.round(media))} ${media.toFixed(1)} (${e.avaliacoes.length} avaliações)</span>`;
   document.getElementById("home").style.display="none"; document.getElementById("pageRank").classList.remove("open"); document.getElementById("pageEmp").classList.add("open");
   let galeriaHTML = e.fotos.map((f,idx)=>`<img src="${f}" class="${idx===0?'active':''}" onclick="trocarFoto(this,'${f}')">`).join("");
+
+  let comentariosHTML = "";
+  if(e.avaliacoes && e.avaliacoes.length){
+    comentariosHTML = e.avaliacoes.map(a=>{
+      let nomeExibir = a.nome || a.email.split("@")[0];
+      let inicial = nomeExibir.charAt(0).toUpperCase();
+      return `<div class="coment-card">
+        <div class="avatar">${inicial}</div>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><b style="font-size:14px">${nomeExibir}</b><span class="stars">${"★".repeat(a.nota)}${"☆".repeat(5-a.nota)}</span></div>
+          <p style="font-size:13px;color:#333;margin-top:4px;line-height:1.4">${a.coment||"<i style='color:#999'>Sem comentário</i>"}</p>
+        </div>
+      </div>`;
+    }).join("");
+  } else {
+    comentariosHTML = `<p style='font-size:13px;color:#999;text-align:center;padding:20px'>Nenhuma avaliação ainda. Seja o primeiro a avaliar! ⭐</p>`;
+  }
+
   document.getElementById("detalhe").innerHTML=`
   <div class="card">
     <img id="fotoGrande" src="${e.fotos[0]}" style="width:100%;height:280px;object-fit:cover">
@@ -83,21 +103,41 @@ window.abrir=i=>{
     <div class="card-info">
       <h2>${e.nome}</h2><div style="margin:6px 0">${mediaTexto}</div>
       <p style="margin:8px 0">${e.desc}</p><p style="font-size:12px;color:#666">${e.categoria}</p>
-      <hr style="margin:12px 0">
-      <h4>Avaliar (1 por email)</h4>
-      <input id="emailA" placeholder="Seu email" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:6px 0">
-      <label style="font-size:12px;font-weight:700">Sua nota:</label>
-      <div id="estrelasClick" class="star-rate"><span class="on" onclick="setNota(1)">★</span><span class="on" onclick="setNota(2)">★</span><span class="on" onclick="setNota(3)">★</span><span class="on" onclick="setNota(4)">★</span><span class="on" onclick="setNota(5)">★</span></div>
-      <small id="textoNota">5 estrelas</small>
-      <textarea id="comentA" placeholder="Comentário" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin-top:8px"></textarea>
-      <button class="btn btn-av" style="width:100%;padding:14px;margin-top:10px;font-size:14px" onclick="avaliar(${i})">Enviar avaliação</button>
-      <button class="btn btn-qr" style="width:100%;margin-top:8px;padding:14px;font-size:14px" onclick="pedirSenhaQR('${e.nome.replace(/'/g,"\\'")}')">📍 Gerar QR</button>
-      <div style="margin-top:16px"><h4>Comentários</h4>${e.avaliacoes&&e.avaliacoes.length?e.avaliacoes.map(a=>`<div style="background:#f5f5f5;padding:10px;border-radius:10px;margin:6px 0"><b style="font-size:11px">${a.email}</b> <span class="stars">${"★".repeat(a.nota)}</span><p style="font-size:13px;margin-top:4px">${a.coment||""}</p></div>`).join("") : "<p style='font-size:12px;color:#999;margin-top:6px'>Nenhum comentário ainda</p>"}</div>
+
+      <div class="form-card">
+        <h4 style="margin-bottom:8px">Deixe sua avaliação</h4>
+        <input id="nomeA" placeholder="Seu nome" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:6px 0">
+        <input id="emailA" placeholder="Seu email (não será exibido)" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:6px 0">
+        <label style="font-size:12px;font-weight:700;margin-top:6px;display:block">Sua nota:</label>
+        <div id="estrelasClick" class="star-rate"><span class="on" onclick="setNota(1)">★</span><span class="on" onclick="setNota(2)">★</span><span class="on" onclick="setNota(3)">★</span><span class="on" onclick="setNota(4)">★</span><span class="on" onclick="setNota(5)">★</span></div>
+        <small id="textoNota">5 estrelas</small>
+        <textarea id="comentA" placeholder="Conte como foi sua experiência..." style="width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin-top:8px;min-height:80px"></textarea>
+        <button class="btn btn-av" style="width:100%;padding:14px;margin-top:10px;font-size:15px" onclick="avaliar(${i})">Enviar avaliação</button>
+        <button class="btn btn-qr" style="width:100%;margin-top:8px;padding:14px;font-size:14px" onclick="pedirSenhaQR('${e.nome.replace(/'/g,"\\'")}')">📍 Gerar QR</button>
+      </div>
+
+      <div style="margin-top:20px">
+        <h3 style="font-size:16px;margin-bottom:8px">⭐ Avaliações (${e.avaliacoes?e.avaliacoes.length:0})</h3>
+        ${comentariosHTML}
+      </div>
     </div>
   </div>`;
 };
 window.trocarFoto=(el,src)=>{ document.getElementById("fotoGrande").src=src; document.querySelectorAll(".gal img").forEach(i=>i.classList.remove("active")); el.classList.add("active"); }
-window.avaliar=async i=>{let email=document.getElementById("emailA").value.toLowerCase().trim();let nota=notaAtual;let coment=document.getElementById("comentA").value.trim();if(!email.includes("@")){alert("Email inválido");return}let e=empresas[i];if(e.avaliacoes&&e.avaliacoes.some(a=>a.email===email)){alert("Esse email já avaliou!");return}let novas=[...(e.avaliacoes||[]),{email,nota,coment}];await updateDoc(doc(db,"empresas",e._id),{avaliacoes:novas});alert("Avaliação salva!");carregarNuvem();abrir(i);};
+window.avaliar=async i=>{
+  let nome=document.getElementById("nomeA").value.trim();
+  let email=document.getElementById("emailA").value.toLowerCase().trim();
+  let nota=notaAtual;
+  let coment=document.getElementById("comentA").value.trim();
+  if(!nome){alert("Digite seu nome");return}
+  if(!email.includes("@")){alert("Email inválido");return}
+  let e=empresas[i];
+  if(e.avaliacoes&&e.avaliacoes.some(a=>a.email===email)){alert("Esse email já avaliou esta empresa!");return}
+  let novas=[...(e.avaliacoes||[]),{nome,email,nota,coment}];
+  await updateDoc(doc(db,"empresas",e._id),{avaliacoes:novas});
+  alert("Obrigado, "+nome+"! Avaliação enviada!");
+  carregarNuvem();abrir(i);
+};
 window.showHome=()=>{document.getElementById("home").style.display="block";document.getElementById("pageEmp").classList.remove("open");document.getElementById("pageRank").classList.remove("open"); history.replaceState(null,'',location.pathname);};
 window.showRank=()=>{document.getElementById("home").style.display="none";document.getElementById("pageEmp").classList.remove("open");document.getElementById("pageRank").classList.add("open");if(empresas.length===0){document.getElementById("listaRank").innerHTML=`<div class="empty"><p>Nenhuma empresa ainda</p></div>`;return;}let rank=[...empresas].map(e=>{let media=calculaMedia(e); return {...e,media:media===null?0:media,qtd:e.avaliacoes?e.avaliacoes.length:0}}).sort((a,b)=>b.media-a.media||b.qtd-a.qtd);document.getElementById("listaRank").innerHTML=rank.map((e,i)=>{let trofeu=i===0?"🥇":i===1?"🥈":i===2?"🥉":`#${i+1}`; let txtMedia = e.media===0? "Sem aval." : `★ ${e.media.toFixed(1)}`; return `<div class="rank-item"><div class="rank-pos">${trofeu}</div><img src="${e.fotos[0]}" style="width:50px;height:50px;border-radius:10px;object-fit:cover"><div style="flex:1"><b style="font-size:13px">${e.nome}</b><br><span class="stars">${txtMedia} (${e.qtd})</span><br><span style="font-size:11px;color:#666">${e.categoria}</span></div><button class="pill pill-emp" onclick="abrir(${empresas.findIndex(x=>x._id===e._id)})">Ver</button></div>`}).join("");};
 </script></body></html>
