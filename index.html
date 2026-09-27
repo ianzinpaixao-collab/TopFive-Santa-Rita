@@ -2,159 +2,197 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>TopFive Santa Rita - Ranking Oficial</title>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+<title>TopFive - Santa Rita</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <style>
-:root{--gold:#FFD700;--black:#0a0a0a}*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',sans-serif;background:#f6f6f6;color:#111}
-.top{padding:12px 5%;display:flex;justify-content:space-between;align-items:center;background:#0a0a0a;border-bottom:2px solid var(--gold);position:sticky;top:0;z-index:50}
-.logo{font-family:'Oswald';color:#fff;font-size:22px}.logo span{color:var(--gold)}
-.btn{background:var(--gold);color:#000;padding:12px 18px;border-radius:8px;font-weight:800;border:0;cursor:pointer}
-.hero{background:#0a0a0a;color:#fff;padding:40px 5%;text-align:center}
-.hero h1{font-family:'Oswald';font-size:40px;line-height:.9;text-transform:uppercase}.hero h1 em{color:var(--gold);font-style:normal}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:20px 5%}
-.card{background:#fff;border-radius:16px;overflow:hidden;border:1px solid #e5e5e5;cursor:pointer}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Inter',sans-serif;background:#f2f2f2}
+.top{ background:#0f0f0f; padding:10px 12px; display:flex; align-items:center; gap:8px; position:sticky; top:0; z-index:99}
+.logo{color:#FFD700;font-weight:800;font-size:18px}
+.logo b{color:#fff}
+.pill{padding:6px 12px;border-radius:20px;font-size:12px;font-weight:600;border:0;cursor:pointer}
+.pill-emp{background:#2a2a2a;color:#fff}
+.pill-rank{background:#FFD700;color:#000}
+.pill-cad{background:#3b82f6;color:#fff}
+.count{margin:12px;background:#fff;padding:10px 14px;border-radius:10px;font-size:13px;border:1px solid #e5e5e5}
+.card{background:#fff;border-radius:16px;overflow:hidden;margin:0 12px;border:1px solid #e5e5e5;box-shadow:0 2px 8px #0001}
 .card img{width:100%;height:180px;object-fit:cover}
-.info{padding:12px}
-.badge{background:#111;color:#fff;padding:4px 8px;border-radius:12px;font-size:10px}
-.stars{color:#ffb800}
-.modal{position:fixed;inset:0;background:#000000cc;display:none;align-items:center;justify-content:center;z-index:999;padding:12px}
+.card-info{padding:10px 12px}
+.stars{color:#FFB800;font-size:12px}
+.btns{display:flex;gap:8px;margin-top:10px}
+.btn{flex:1;padding:10px;border-radius:20px;border:0;font-weight:700;font-size:12px;cursor:pointer}
+.btn-av{background:#22c55e;color:#fff}
+.btn-qr{background:#FFD700;color:#000}
+.modal{position:fixed;inset:0;background:#000a;display:none;align-items:center;justify-content:center;z-index:999;padding:12px}
 .modal.open{display:flex}
-.box{background:#fff;border-radius:16px;padding:20px;width:100%;max-width:520px;max-height:95vh;overflow:auto}
-.box input,.box select,.box textarea{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;margin:6px 0}
-.foto-preview{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
-.foto-preview img{width:70px;height:70px;object-fit:cover;border-radius:8px}
-.page{display:none;padding:20px 5%}.page.open{display:block}
-@media(max-width:800px){.grid{grid-template-columns:1fr}.hero h1{font-size:28px}}
+.box{background:#fff;border-radius:16px;padding:18px;width:100%;max-width:500px;max-height:95vh;overflow:auto}
+.box input,.box select,.box textarea{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:6px 0;font-size:14px}
+.preview{display:flex;gap:6px;flex-wrap:wrap}
+.preview img{width:60px;height:60px;object-fit:cover;border-radius:8px}
+.page{display:none}.page.open{display:block}
 </style>
 </head>
 <body>
 
 <div class="top">
-<div class="logo">TOP<span>FIVE</span></div>
-<button class="btn" onclick="openCad()">Cadastrar Minha Empresa</button>
+<div class="logo">Top<b>Five</b></div>
+<button class="pill pill-emp" onclick="showHome()">Empresas</button>
+<button class="pill pill-rank">⭐ Ranking</button>
+<button class="pill pill-cad" onclick="openCad()">📋 Cadastrar</button>
 </div>
 
 <div id="home">
-<div class="hero">
-<h1>AS 5 MELHORES EMPRESAS DE <em>CADA SETOR</em> DE SANTA RITA</h1>
-<p style="color:#999;margin-top:10px;font-size:13px">Ranking oficial votado pelo povo - só 1 avaliação por email</p>
-</div>
-<div class="grid" id="lista"></div>
+<div class="count">✅ <span id="qtd">1</span> empresa(s)</div>
+<div id="lista"></div>
 </div>
 
-<div id="pageEmpresa" class="page">
-<button class="btn" style="background:#111;color:var(--gold)" onclick="voltarHome()">← Voltar</button>
-<div id="detalheEmpresa" style="margin-top:16px"></div>
+<div id="pageEmp" class="page" style="padding:12px">
+<button class="pill pill-emp" onclick="showHome()">← Voltar</button>
+<div id="detalhe" style="margin-top:12px"></div>
 </div>
 
+<!-- MODAL CADASTRO ANTIGO COMPLETO -->
 <div class="modal" id="modalCad">
 <div class="box">
-<h2 style="font-family:'Oswald'">CADASTRAR EMPRESA</h2>
-<input id="nome" placeholder="Nome da Empresa *">
+<h3>Cadastrar Empresa</h3>
+<p style="font-size:12px;color:#666;margin-bottom:8px">Preencha com dados reais</p>
+<input id="nome" placeholder="Nome da Empresa * ex: Artbuffet">
 <input id="cnpj" placeholder="CNPJ Verdadeiro * ex: 12.345.678/0001-90">
-<select id="categoria"><option value="">Categoria *</option><option>Confeitaria</option><option>Barbearia</option><option>Restaurante</option><option>Moda</option><option>Serviços</option></select>
-<textarea id="desc" placeholder="Descrição completa do que a empresa faz *"></textarea>
-<label style="font-size:12px;font-weight:700">Fotos da empresa (até 5)</label>
-<input type="file" id="fotos" accept="image/*" multiple onchange="previewFotos()">
-<div class="foto-preview" id="preview"></div>
-<input type="password" id="senhaAdm" placeholder="Senha de Administrador *">
-<p style="font-size:11px;color:#666">Senha de adm cadastrada: <b>107020</b></p>
-<div id="areaQR" style="display:none;text-align:center;margin-top:12px;border-top:1px solid #eee;padding-top:12px">
-<p style="font-size:12px;font-weight:700">QR CODE GERADO:</p>
-<div id="qrcode" style="display:flex;justify-content:center;margin:12px 0"></div>
+<select id="cat"><option value="">Categoria *</option><option selected>Venda de Serviços</option><option>Confeitaria</option><option>Barbearia</option><option>Restaurante</option><option>Moda</option></select>
+<textarea id="desc" placeholder="Descrição - Serviços diversos *">Serviços diversos</textarea>
+<label style="font-size:12px;font-weight:700">Fotos da empresa (pode escolher várias)</label>
+<input type="file" id="fotos" accept="image/*" multiple onchange="previewF()">
+<div class="preview" id="prev"></div>
+<input type="password" id="senha" placeholder="Senha de Administrador *">
+<p style="font-size:11px;color:#888">Senha atual: <b>107020</b></p>
+
+<div id="areaQR" style="display:none;text-align:center;margin-top:12px;border-top:1px solid #eee;padding-top:10px">
+<p style="font-weight:700;font-size:13px">QR Code gerado! Leva direto pra página da empresa:</p>
+<div id="qrcode" style="display:flex;justify-content:center;margin:10px 0"></div>
 <p id="linkQR" style="font-size:11px;color:#666;word-break:break-all"></p>
 </div>
-<button class="btn" style="width:100%;margin-top:10px" onclick="salvarEmpresa()">FINALIZAR CADASTRO E GERAR QR</button>
-<button onclick="closeCad()" style="width:100%;margin-top:8px;padding:10px;border:0;background:#eee;border-radius:8px">Cancelar</button>
+
+<button style="width:100%;padding:14px;background:#FFD700;border:0;border-radius:10px;font-weight:800;margin-top:10px" onclick="salvar()">SALVAR E GERAR QR CODE</button>
+<button style="width:100%;padding:10px;background:#eee;border:0;border-radius:10px;margin-top:6px" onclick="closeCad()">Cancelar</button>
 </div>
 </div>
 
 <script>
 const SENHA_ADM = "107020";
 let tempFotos = [];
-let empresas = JSON.parse(localStorage.getItem("topfive_v2")||"null");
+let empresas = JSON.parse(localStorage.getItem("topfive_old")||"null");
 
 if(!empresas){
 empresas = [{
-nome:"ArtBuffet", cnpj:"42.189.673/0001-05", categoria:"Confeitaria",
-desc:"Confeitaria e buffet completo para festas em Santa Rita. Bolos, doces, salgados e decoração. Qualidade e sabor que todo mundo ama.",
-fotos:["https://images.unsplash.com/photo-1551024506-0bccd828d307?w=600","https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600","https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=600"],
-avaliacoes:[{email:"cliente1@gmail.com",nota:5,comentario:"Melhor bolo da cidade!"},{email:"cliente2@gmail.com",nota:4,comentario:"Atendimento top!"}]
+nome:"Artbuffet",
+cnpj:"42.189.673/0001-05",
+categoria:"Venda de Serviços",
+desc:"Serviços diversos",
+fotos:["https://i.imgur.com/8Km9tLL.jpeg","https://images.unsplash.com/photo-1551024506-0bccd828d307?w=600","https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600"],
+avaliacoes:[{email:"cliente1@gmail.com",nota:5,coment:"Melhor da cidade!"},{email:"cliente2@gmail.com",nota:4,coment:"Muito bom"}]
 }];
-localStorage.setItem("topfive_v2", JSON.stringify(empresas));
+localStorage.setItem("topfive_old", JSON.stringify(empresas));
 }
 
-function previewFotos(){
-const files = document.getElementById("fotos").files;
-tempFotos = []; document.getElementById("preview").innerHTML="";
-for(let f of files){ let url=URL.createObjectURL(f); tempFotos.push(url);
-let img=document.createElement("img"); img.src=url; document.getElementById("preview").appendChild(img); }
+function previewF(){
+let files=document.getElementById("fotos").files;
+tempFotos=[]; document.getElementById("prev").innerHTML="";
+for(let f of files){ let u=URL.createObjectURL(f); tempFotos.push(u); let im=document.createElement("img"); im.src=u; document.getElementById("prev").appendChild(im); }
 }
 
 function render(){
-document.getElementById("lista").innerHTML = empresas.map((e,i)=>{
-let media = e.avaliacoes.length? (e.avaliacoes.reduce((s,a)=>s+a.nota,0)/e.avaliacoes.length).toFixed(1):"5.0";
-return `<div class="card" onclick="abrirEmpresa(${i})"><img src="${e.fotos[0]}"><div class="info"><span class="badge">🥇 ${e.categoria.toUpperCase()}</span><h3 style="margin:6px 0">${e.nome}</h3><p class="stars">★★★★★ ${media} (${e.avaliacoes.length} avaliações)</p><p style="font-size:11px;color:#666">CNPJ: ${e.cnpj}</p></div></div>`
-}).join("") + `<div class="card" style="border:2px dashed var(--gold);background:#FFFBEB;display:flex;align-items:center;justify-content:center;padding:30px;text-align:center" onclick="openCad()"><div><div style="font-size:36px">👑</div><h3>SUA EMPRESA AQUI?</h3><p style="font-size:12px">Clique para cadastrar</p></div></div>`;
+document.getElementById("qtd").innerText=empresas.length;
+document.getElementById("lista").innerHTML=empresas.map((e,i)=>{
+let media = (e.avaliacoes.reduce((s,a)=>s+a.nota,0)/e.avaliacoes.length).toFixed(1);
+return `
+<div class="card">
+<img src="${e.fotos[0]}" onclick="abrir(${i})">
+<div class="card-info">
+<b style="font-size:14px">${e.nome}</b><br>
+<span style="font-size:11px;background:#eee;padding:2px 6px;border-radius:10px">${e.categoria}</span>
+<span class="stars">★★★★★ ${media} (${e.avaliacoes.length})</span>
+<p style="font-size:11px;color:#666">${e.desc}</p>
+<div class="btns">
+<button class="btn btn-av" onclick="abrir(${i})">⭐ Avaliar</button>
+<button class="btn btn-qr" onclick="gerarQRAntigo('${e.nome}')">📍 QR Code</button>
+</div>
+</div>
+</div>`
+}).join("");
 }
 render();
+
 function openCad(){document.getElementById("modalCad").classList.add("open")}
 function closeCad(){document.getElementById("modalCad").classList.remove("open"); document.getElementById("areaQR").style.display="none"; document.getElementById("qrcode").innerHTML="";}
-function salvarEmpresa(){
-const nome=document.getElementById("nome").value.trim();
-const cnpj=document.getElementById("cnpj").value.trim();
-const cat=document.getElementById("categoria").value;
-const desc=document.getElementById("desc").value.trim();
-const senha=document.getElementById("senhaAdm").value;
-if(!nome||!cnpj||!cat||!desc){alert("Preencha tudo");return}
-if(senha!==SENHA_ADM){alert("Senha de administrador errada!");return}
+
+function salvar(){
+let nome=document.getElementById("nome").value.trim();
+let cnpj=document.getElementById("cnpj").value.trim();
+let cat=document.getElementById("cat").value;
+let desc=document.getElementById("desc").value.trim();
+let senha=document.getElementById("senha").value;
+if(!nome||!cnpj||!cat){alert("Preencha nome, CNPJ e categoria");return}
+if(senha!==SENHA_ADM){alert("Senha de administrador errada! Use 107020");return}
 if(cnpj.length<14){alert("CNPJ inválido");return}
-let fotos = tempFotos.length?tempFotos:["https://images.unsplash.com/photo-1551024506-0bccd828d307?w=600"];
+let fotos = tempFotos.length?tempFotos:["https://i.imgur.com/8Km9tLL.jpeg"];
 empresas.push({nome,cnpj,categoria:cat,desc,fotos,avaliacoes:[]});
-localStorage.setItem("topfive_v2", JSON.stringify(empresas));
-const link = `https://ianzinpaixao-collab.github.io/TopFive-Santa-Rita/?empresa=${encodeURIComponent(nome)}`;
+localStorage.setItem("topfive_old", JSON.stringify(empresas));
+let link = `https://ianzinpaixao-collab.github.io/TopFive-Santa-Rita/?empresa=${encodeURIComponent(nome)}`;
 document.getElementById("areaQR").style.display="block";
 document.getElementById("qrcode").innerHTML="";
 new QRCode(document.getElementById("qrcode"),{text:link,width:180,height:180});
 document.getElementById("linkQR").innerText=link;
 render();
 }
-function abrirEmpresa(i){
-const e = empresas[i];
+
+function gerarQRAntigo(nome){
+openCad();
+let link = `https://ianzinpaixao-collab.github.io/TopFive-Santa-Rita/?empresa=${encodeURIComponent(nome)}`;
+document.getElementById("areaQR").style.display="block";
+document.getElementById("qrcode").innerHTML="";
+setTimeout(()=>{new QRCode(document.getElementById("qrcode"),{text:link,width:180,height:180});},200);
+document.getElementById("linkQR").innerText=link;
+}
+
+function abrir(i){
+let e=empresas[i];
 let media = e.avaliacoes.length? (e.avaliacoes.reduce((s,a)=>s+a.nota,0)/e.avaliacoes.length).toFixed(1):"5.0";
 document.getElementById("home").style.display="none";
-document.getElementById("pageEmpresa").classList.add("open");
-document.getElementById("detalheEmpresa").innerHTML=`
-<h1 style="font-family:'Oswald';font-size:32px">${e.nome}</h1>
-<p class="stars">★★★★★ ${media} (${e.avaliacoes.length} avaliações) • ${e.categoria}</p>
-<p style="font-size:12px;color:#666;margin:6px 0">CNPJ: ${e.cnpj}</p>
-<p style="margin:10px 0">${e.desc}</p>
-<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0">${e.fotos.map(f=>`<img src="${f}" style="width:100%;height:120px;object-fit:cover;border-radius:12px">`).join("")}</div>
-<hr style="margin:16px 0">
-<h3>Avaliar esta empresa (1 voto por email)</h3>
-<input id="emailAval" placeholder="Seu email *" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;margin:6px 0">
-<select id="notaAval" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:8px"><option value="5">★★★★★ 5 estrelas</option><option value="4">★★★★ 4 estrelas</option><option value="3">★★★ 3 estrelas</option><option value="2">★★ 2 estrelas</option><option value="1">★ 1 estrela</option></select>
-<textarea id="comentAval" placeholder="Seu comentário" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;margin:6px 0"></textarea>
-<button class="btn" style="width:100%" onclick="enviarAvaliacao(${i})">ENVIAR AVALIAÇÃO</button>
-<div style="margin-top:16px">${e.avaliacoes.map(a=>`<div style="background:#fff;border:1px solid #eee;border-radius:12px;padding:10px;margin:6px 0"><b>${a.email}</b> <span class="stars">${"★".repeat(a.nota)}</span><p style="font-size:13px">${a.comentario}</p></div>`).join("")}</div>
+document.getElementById("pageEmp").classList.add("open");
+document.getElementById("detalhe").innerHTML=`
+<div class="card">
+<img src="${e.fotos[0]}">
+<div class="card-info">
+<h2>${e.nome}</h2>
+<p style="font-size:12px;color:#666">CNPJ: ${e.cnpj} • ${e.categoria}</p>
+<p class="stars">★★★★★ ${media} (${e.avaliacoes.length} avaliações)</p>
+<p style="margin:8px 0">${e.desc}</p>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:10px 0">${e.fotos.map(f=>`<img src="${f}" style="width:100%;height:80px;object-fit:cover;border-radius:8px">`).join("")}</div>
+<hr style="margin:12px 0">
+<h4>Avaliar (só 1 por email - anti fraude)</h4>
+<input id="emailA" placeholder="Seu email" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;margin:6px 0">
+<select id="notaA" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px"><option value="5">★★★★★ 5</option><option value="4">★★★★ 4</option><option value="3">★★★ 3</option><option value="2">★★ 2</option><option value="1">★ 1</option></select>
+<textarea id="comentA" placeholder="Seu comentário" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;margin:6px 0"></textarea>
+<button class="btn btn-av" style="width:100%" onclick="avaliar(${i})">Enviar Avaliação</button>
+<div style="margin-top:12px">${e.avaliacoes.map(a=>`<div style="background:#f9f9f9;padding:8px;border-radius:8px;margin:4px 0"><b style="font-size:12px">${a.email}</b> <span class="stars">${"★".repeat(a.nota)}</span><p style="font-size:12px">${a.coment}</p></div>`).join("")}</div>
+</div>
+</div>
 `;
 }
-function enviarAvaliacao(i){
-const email=document.getElementById("emailAval").value.trim().toLowerCase();
-const nota=parseInt(document.getElementById("notaAval").value);
-const coment=document.getElementById("comentAval").value.trim();
+function avaliar(i){
+let email=document.getElementById("emailA").value.toLowerCase().trim();
+let nota=parseInt(document.getElementById("notaA").value);
+let coment=document.getElementById("comentA").value.trim();
 if(!email.includes("@")){alert("Email inválido");return}
-if(empresas[i].avaliacoes.some(a=>a.email===email)){alert("Esse email já avaliou! Só 1 avaliação por email.");return}
-empresas[i].avaliacoes.push({email,nota,comentario:coment});
-localStorage.setItem("topfive_v2", JSON.stringify(empresas));
-abrirEmpresa(i); render();
+if(empresas[i].avaliacoes.some(a=>a.email===email)){alert("Esse email já avaliou essa empresa!");return}
+empresas[i].avaliacoes.push({email,nota,coment});
+localStorage.setItem("topfive_old", JSON.stringify(empresas));
+abrir(i); render();
 }
-function voltarHome(){document.getElementById("home").style.display="block";document.getElementById("pageEmpresa").classList.remove("open");}
+function showHome(){document.getElementById("home").style.display="block";document.getElementById("pageEmp").classList.remove("open");}
 window.onload=()=>{
-const p=new URLSearchParams(location.search);
-if(p.get("empresa")){let idx=empresas.findIndex(e=>e.nome===p.get("empresa")); if(idx>=0) abrirEmpresa(idx);}
+let p=new URLSearchParams(location.search);
+if(p.get("empresa")){let idx=empresas.findIndex(e=>e.nome===p.get("empresa")); if(idx>=0) abrir(idx);}
 }
 </script>
 </body>
