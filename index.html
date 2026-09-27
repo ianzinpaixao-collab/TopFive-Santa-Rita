@@ -7,17 +7,23 @@
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}body{font-family:'Inter',sans-serif;background:#f2f2f2}
-.top{ background:#0f0f0f; padding:10px 12px; display:flex; align-items:center; gap:8px; position:sticky; top:0; z-index:99}
+.top{background:#0f0f0f;padding:10px 12px;display:flex;align-items:center;gap:8px;position:sticky;top:0;z-index:99}
 .logo{color:#FFD700;font-weight:800;font-size:18px}.logo b{color:#fff}
 .pill{padding:6px 12px;border-radius:20px;font-size:12px;font-weight:600;border:0;cursor:pointer}
 .pill-emp{background:#2a2a2a;color:#fff}.pill-rank{background:#FFD700;color:#000}.pill-cad{background:#3b82f6;color:#fff}
 .count{margin:12px;background:#fff;padding:10px 14px;border-radius:10px;font-size:13px;border:1px solid #e5e5e5}
+.card{background:#fff;border-radius:16px;overflow:hidden;margin:0 12px 12px 12px;border:1px solid #e5e5e5}
+.card img{width:100%;height:180px;object-fit:cover}
+.card-info{padding:10px 12px}.stars{color:#FFB800;font-size:12px}
+.btns{display:flex;gap:8px;margin-top:10px}
+.btn{flex:1;padding:10px;border-radius:20px;border:0;font-weight:700;font-size:12px;cursor:pointer}
+.btn-av{background:#22c55e;color:#fff}.btn-qr{background:#FFD700;color:#000}
+.empty{text-align:center;padding:60px 20px;background:#fff;margin:12px;border-radius:16px;border:2px dashed #FFD700}
 .modal{position:fixed;inset:0;background:#000a;display:none;align-items:center;justify-content:center;z-index:999;padding:12px}
 .modal.open{display:flex}.box{background:#fff;border-radius:16px;padding:18px;width:100%;max-width:500px;max-height:95vh;overflow:auto}
 .box input,.box select,.box textarea{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:6px 0}
+.preview{display:flex;gap:6px;flex-wrap:wrap}.preview img{width:60px;height:60px;object-fit:cover;border-radius:8px}
 .page{display:none}.page.open{display:block}
-.btn{flex:1;padding:10px;border-radius:20px;border:0;font-weight:700;font-size:12px;cursor:pointer}
-.btn-av{background:#22c55e;color:#fff}.btn-qr{background:#FFD700;color:#000}
 </style>
 </head>
 <body>
@@ -25,13 +31,13 @@
 <div class="top">
 <div class="logo">Top<b>Five</b></div>
 <button class="pill pill-emp" onclick="showHome()">Empresas</button>
-<button class="pill pill-rank">⭐ Ranking</button>
+<button class="pill pill-rank" onclick="alert('Ranking em breve')">⭐ Ranking</button>
 <button class="pill pill-cad" onclick="openCad()">📋 Cadastrar</button>
 </div>
 
 <div id="home">
-<div class="count">✅ <span id="qtd">0</span> empresa(s)</div>
-<div id="lista"></div>
+<div class="count">☁️ Banco na Nuvem | ✅ <span id="qtd">0</span> empresa(s)</div>
+<div id="lista"><div class="empty">Carregando da nuvem...</div></div>
 </div>
 
 <div id="pageEmp" class="page" style="padding:12px">
@@ -39,29 +45,33 @@
 <div id="detalhe" style="margin-top:12px"></div>
 </div>
 
+<!-- CADASTRO -->
 <div class="modal" id="modalCad">
 <div class="box">
 <h3>Cadastrar Empresa</h3>
 <input id="nome" placeholder="Nome da Empresa *">
 <input id="cnpj" placeholder="CNPJ *">
-<select id="cat"><option value="">Categoria *</option><option>Venda de Serviços</option><option>Confeitaria</option><option>Barbearia</option><option>Restaurante</option><option>Moda</option></select>
+<select id="cat"><option value="">Categoria *</option><option>Venda de Serviços</option><option>Confeitaria</option><option>Barbearia</option><option>Restaurante</option><option>Moda</option><option>Outros</option></select>
 <textarea id="desc" placeholder="Descrição *"></textarea>
+<label style="font-size:12px;font-weight:700">Fotos (até 5)</label>
 <input type="file" id="fotos" accept="image/*" multiple onchange="previewF()">
-<div id="prev" style="display:flex;gap:6px;flex-wrap:wrap"></div>
-<input type="password" id="senha" placeholder="Senha de Administrador *">
+<div class="preview" id="prev"></div>
+<input type="password" id="senha" placeholder="Senha 107020 *">
 <div id="areaQR" style="display:none;text-align:center;margin-top:12px;border-top:1px solid #eee;padding-top:10px">
+<p style="font-weight:700">✅ Salvo na nuvem! QR:</p>
 <div id="qrcode" style="display:flex;justify-content:center;margin:10px 0"></div>
 <p id="linkQR" style="font-size:11px;color:#666;word-break:break-all"></p>
 </div>
-<button style="width:100%;padding:14px;background:#FFD700;border:0;border-radius:10px;font-weight:800;margin-top:10px" onclick="salvar()">SALVAR E GERAR QR CODE</button>
-<button style="width:100%;padding:10px;background:#eee;border:0;border-radius:10px;margin-top:6px" onclick="closeCad()">Cancelar</button>
+<button style="width:100%;padding:14px;background:#FFD700;border:0;border-radius:10px;font-weight:800;margin-top:10px" onclick="salvarNuvem()">SALVAR NA NUVEM</button>
+<button style="width:100%;padding:10px;background:#eee;border:0;border-radius:10px;margin-top:6px" onclick="closeCad()">Fechar</button>
 </div>
 </div>
 
+<!-- QR COM SENHA -->
 <div class="modal" id="modalQR">
 <div class="box" style="text-align:center">
-<h3>🔒 Área restrita</h3>
-<p style="font-size:13px;color:#666">Digite a senha para gerar o QR Code</p>
+<h3>🔒 Gerar QR Code</h3>
+<p style="font-size:13px;color:#666">Digite a senha ADM</p>
 <input type="password" id="senhaQR" placeholder="Senha *">
 <div id="areaQR2" style="display:none;margin-top:12px">
 <div id="qrcode2" style="display:flex;justify-content:center;margin:10px 0"></div>
@@ -72,71 +82,133 @@
 </div>
 </div>
 
-<script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAMq40L6kC7OrViDddCqafYduk4umW8z6I",
+  authDomain: "topfive-f8339.firebaseapp.com",
+  projectId: "topfive-f8339",
+  storageBucket: "topfive-f8339.firebasestorage.app",
+  messagingSenderId: "723054302672",
+  appId: "1:723054302672:web:2fea11999040d9474755d5"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
 const SENHA_ADM = "107020";
 let tempFotos = [];
 let empresaQRAtual = "";
+let empresas = [];
 
-// === LIMPEZA TOTAL FORÇADA DA ARTBUFFET ===
-localStorage.removeItem("topfive_v2");
-localStorage.removeItem("topfive_old");
-let empresas = JSON.parse(localStorage.getItem("topfive_final_v1")||"[]");
-// remove artbuffet e duplicatas
-empresas = empresas.filter(e =>!e.nome.toLowerCase().includes("artbuffet") &&!e.nome.toLowerCase().includes("art buffet"));
-// deixa zerado mesmo
-empresas = [];
-localStorage.setItem("topfive_final_v1", JSON.stringify(empresas));
+async function carregarNuvem(){
+  try{
+    const snap = await getDocs(collection(db, "empresas"));
+    empresas = [];
+    snap.forEach(d=>{
+      let e = d.data();
+      if(e.nome && e.nome.toLowerCase().includes("artbuffet")) return;
+      empresas.push({...e, _id: d.id});
+    });
+    render();
+  }catch(e){
+    console.log(e);
+    document.getElementById("lista").innerHTML=`<div class="empty"><h3>Ative o Firestore</h3><p style="font-size:12px">Vá no Firebase > Firestore Database > Criar banco > Modo de teste</p></div>`;
+  }
+}
+carregarNuvem();
 
-function previewF(){
-let files=document.getElementById("fotos").files; tempFotos=[]; document.getElementById("prev").innerHTML="";
-for(let f of files){ let u=URL.createObjectURL(f); tempFotos.push(u); let im=document.createElement("img"); im.src=u; im.style.width="60px"; im.style.height="60px"; im.style.objectFit="cover"; im.style.borderRadius="8px"; document.getElementById("prev").appendChild(im); }
+window.previewF = function(){
+  let files=document.getElementById("fotos").files; tempFotos=[]; document.getElementById("prev").innerHTML="";
+  for(let f of files){
+    let reader = new FileReader();
+    reader.onload = (ev)=>{
+      tempFotos.push(ev.target.result);
+      let im=document.createElement("img"); im.src=ev.target.result; document.getElementById("prev").appendChild(im);
+    }
+    reader.readAsDataURL(f);
+  }
 }
-function render(){
-document.getElementById("qtd").innerText=empresas.length;
-if(empresas.length===0){
-document.getElementById("lista").innerHTML=`<div style="text-align:center;padding:60px 20px;background:#fff;margin:12px;border-radius:16px;border:2px dashed #FFD700"><div style="font-size:48px">🏆</div><h3>Nenhuma empresa cadastrada</h3><p style="font-size:13px;color:#666">O site está limpo e pronto para o banco de dados</p><button class="pill pill-cad" style="margin-top:10px" onclick="openCad()">📋 Cadastrar Empresa</button></div>`;
-return;
+
+window.render = function(){
+  document.getElementById("qtd").innerText=empresas.length;
+  if(empresas.length===0){
+    document.getElementById("lista").innerHTML=`<div class="empty"><div style="font-size:48px">🏆</div><h3>Nenhuma empresa cadastrada</h3><p style="font-size:13px;color:#666">Site limpo e na nuvem. Pronto pra começar!</p><button class="pill pill-cad" style="margin-top:10px" onclick="openCad()">📋 Cadastrar primeira empresa</button></div>`;
+    return;
+  }
+  document.getElementById("lista").innerHTML=empresas.map((e,i)=>{
+    let media = e.avaliacoes && e.avaliacoes.length? (e.avaliacoes.reduce((s,a)=>s+a.nota,0)/e.avaliacoes.length).toFixed(1) : "5.0";
+    let qtd = e.avaliacoes? e.avaliacoes.length : 0;
+    return `<div class="card"><img src="${e.fotos[0]}" onclick="abrir(${i})"><div class="card-info"><b>${e.nome}</b><br><span style="font-size:11px;background:#eee;padding:2px 6px;border-radius:10px">${e.categoria}</span> <span class="stars">★★★★★ ${media} (${qtd})</span><p style="font-size:11px;color:#666">${e.desc || ''}</p><div class="btns"><button class="btn btn-av" onclick="abrir(${i})">⭐ Avaliar</button><button class="btn btn-qr" onclick="pedirSenhaQR('${e.nome.replace(/'/g, "\\'")}')">📍 QR Code</button></div></div></div>`
+  }).join("");
 }
-document.getElementById("lista").innerHTML=empresas.map((e,i)=>{
-let media = e.avaliacoes.length? (e.avaliacoes.reduce((s,a)=>s+a.nota,0)/e.avaliacoes.length).toFixed(1) : "5.0";
-return `<div style="background:#fff;border-radius:16px;overflow:hidden;margin:0 12px 12px 12px;border:1px solid #e5e5e5"><img src="${e.fotos[0]}" style="width:100%;height:180px;object-fit:cover" onclick="abrir(${i})"><div style="padding:10px 12px"><b>${e.nome}</b><br><span style="font-size:11px;background:#eee;padding:2px 6px;border-radius:10px">${e.categoria}</span> <span style="color:#FFB800;font-size:12px">★★★★★ ${media} (${e.avaliacoes.length})</span><div style="display:flex;gap:8px;margin-top:10px"><button class="btn btn-av" onclick="abrir(${i})">⭐ Avaliar</button><button class="btn btn-qr" onclick="pedirSenhaQR('${e.nome}')">📍 QR Code</button></div></div></div>`
-}).join("");
+
+window.openCad = ()=>document.getElementById("modalCad").classList.add("open");
+window.closeCad = ()=>{document.getElementById("modalCad").classList.remove("open"); document.getElementById("areaQR").style.display="none"; document.getElementById("qrcode").innerHTML="";}
+window.closeQR = ()=>{document.getElementById("modalQR").classList.remove("open"); document.getElementById("senhaQR").value=""; document.getElementById("areaQR2").style.display="none"; document.getElementById("qrcode2").innerHTML="";}
+window.pedirSenhaQR = (nome)=>{ empresaQRAtual=nome; document.getElementById("modalQR").classList.add("open"); document.getElementById("senhaQR").value=""; document.getElementById("areaQR2").style.display="none"; document.getElementById("qrcode2").innerHTML=""; }
+window.confirmarQR = ()=>{
+  if(document.getElementById("senhaQR").value!==SENHA_ADM){alert("Senha incorreta!");return;}
+  let link=`https://ianzinpaixao-collab.github.io/TopFive-Santa-Rita/?empresa=${encodeURIComponent(empresaQRAtual)}`;
+  document.getElementById("areaQR2").style.display="block"; document.getElementById("qrcode2").innerHTML=""; new QRCode(document.getElementById("qrcode2"),{text:link,width:200,height:200}); document.getElementById("linkQR2").innerText=link;
 }
-render();
-function openCad(){document.getElementById("modalCad").classList.add("open")}
-function closeCad(){document.getElementById("modalCad").classList.remove("open"); document.getElementById("areaQR").style.display="none"; document.getElementById("qrcode").innerHTML="";}
-function closeQR(){document.getElementById("modalQR").classList.remove("open"); document.getElementById("senhaQR").value=""; document.getElementById("areaQR2").style.display="none"; document.getElementById("qrcode2").innerHTML="";}
-function pedirSenhaQR(nome){ empresaQRAtual = nome; document.getElementById("modalQR").classList.add("open"); document.getElementById("senhaQR").value=""; document.getElementById("areaQR2").style.display="none"; document.getElementById("qrcode2").innerHTML="";}
-function confirmarQR(){
-let s = document.getElementById("senhaQR").value;
-if(s!== SENHA_ADM){ alert("Senha incorreta!"); return; }
-let link = `https://ianzinpaixao-collab.github.io/TopFive-Santa-Rita/?empresa=${encodeURIComponent(empresaQRAtual)}`;
-document.getElementById("areaQR2").style.display="block";
-document.getElementById("qrcode2").innerHTML="";
-new QRCode(document.getElementById("qrcode2"),{text:link,width:200,height:200});
-document.getElementById("linkQR2").innerText=link;
+
+window.salvarNuvem = async ()=>{
+  let nome=document.getElementById("nome").value.trim();
+  let cnpj=document.getElementById("cnpj").value.trim();
+  let cat=document.getElementById("cat").value;
+  let desc=document.getElementById("desc").value.trim();
+  let senha=document.getElementById("senha").value;
+  if(!nome||!cnpj||!cat){alert("Preencha tudo");return}
+  if(senha!==SENHA_ADM){alert("Senha incorreta!");return}
+  if(empresas.some(e=>e.nome.toLowerCase()===nome.toLowerCase())){alert("Empresa já existe!");return}
+  let fotos = tempFotos.length?tempFotos:["https://images.unsplash.com/photo-1551024506-0bccd828d307?w=600"];
+  try{
+    await addDoc(collection(db,"empresas"),{nome,cnpj,categoria:cat,desc,fotos,avaliacoes:[]});
+    let link=`https://ianzinpaixao-collab.github.io/TopFive-Santa-Rita/?empresa=${encodeURIComponent(nome)}`;
+    document.getElementById("areaQR").style.display="block"; document.getElementById("qrcode").innerHTML=""; new QRCode(document.getElementById("qrcode"),{text:link,width:180,height:180}); document.getElementById("linkQR").innerText=link;
+    document.getElementById("nome").value=""; document.getElementById("cnpj").value=""; document.getElementById("desc").value="";
+    carregarNuvem();
+  }catch(e){ alert("Erro: "+e.message+"\nVerifique se criou o Firestore em modo de teste"); }
 }
-function salvar(){
-let nome=document.getElementById("nome").value.trim();
-let cnpj=document.getElementById("cnpj").value.trim();
-let cat=document.getElementById("cat").value;
-let desc=document.getElementById("desc").value.trim();
-let senha=document.getElementById("senha").value;
-if(!nome||!cnpj||!cat){alert("Preencha tudo");return}
-if(senha!==SENHA_ADM){alert("Senha incorreta!");return}
-if(empresas.some(e=>e.nome.toLowerCase().trim()===nome.toLowerCase().trim())){alert("Essa empresa já existe!");return}
-let fotos = tempFotos.length?tempFotos:["https://images.unsplash.com/photo-1551024506-0bccd828d307?w=600"];
-empresas.push({nome,cnpj,categoria:cat,desc,fotos,avaliacoes:[]});
-localStorage.setItem("topfive_final_v1", JSON.stringify(empresas));
-let link = `https://ianzinpaixao-collab.github.io/TopFive-Santa-Rita/?empresa=${encodeURIComponent(nome)}`;
-document.getElementById("areaQR").style.display="block";
-document.getElementById("qrcode").innerHTML="";
-new QRCode(document.getElementById("qrcode"),{text:link,width:180,height:180});
-document.getElementById("linkQR").innerText=link;
-render();
+
+window.abrir = (i)=>{
+  let e=empresas[i];
+  let media = e.avaliacoes && e.avaliacoes.length? (e.avaliacoes.reduce((s,a)=>s+a.nota,0)/e.avaliacoes.length).toFixed(1):"5.0";
+  document.getElementById("home").style.display="none"; document.getElementById("pageEmp").classList.add("open");
+  document.getElementById("detalhe").innerHTML=`
+  <div class="card"><img src="${e.fotos[0]}"><div class="card-info"><h2>${e.nome}</h2><p style="font-size:12px;color:#666">${e.categoria}</p><p class="stars">★★★★★ ${media} (${e.avaliacoes? e.avaliacoes.length : 0})</p><p style="margin:8px 0">${e.desc}</p>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:10px 0">${e.fotos.map(f=>`<img src="${f}" style="width:100%;height:80px;object-fit:cover;border-radius:8px">`).join("")}</div>
+  <hr style="margin:12px 0">
+  <h4>Avaliar (1 por email)</h4>
+  <input id="emailA" placeholder="Seu email" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;margin:6px 0">
+  <select id="notaA" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px"><option value="5">★★★★★ 5</option><option value="4">★★★★ 4</option><option value="3">★★★ 3</option><option value="2">★★ 2</option><option value="1">★ 1</option></select>
+  <textarea id="comentA" placeholder="Comentário" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;margin:6px 0"></textarea>
+  <button class="btn btn-av" style="width:100%" onclick="avaliar(${i})">Enviar Avaliação</button>
+  <div style="margin-top:12px">${e.avaliacoes? e.avaliacoes.map(a=>`<div style="background:#f9f9f9;padding:8px;border-radius:8px;margin:4px 0"><b style="font-size:12px">${a.email}</b> <span class="stars">${"★".repeat(a.nota)}</span><p style="font-size:12px">${a.coment}</p></div>`).join("") : ""}</div>
+  </div></div>`;
 }
-function abrir(i){let e=empresas[i]; let media = e.avaliacoes.length? (e.avaliacoes.reduce((s,a)=>s+a.nota,0)/e.avaliacoes.length).toFixed(1):"5.0"; document.getElementById("home").style.display="none"; document.getElementById("pageEmp").classList.add("open"); document.getElementById("detalhe").innerHTML=`<div style="background:#fff;border-radius:16px;overflow:hidden;border:1px solid #e5e5e5"><img src="${e.fotos[0]}" style="width:100%;height:180px;object-fit:cover"><div style="padding:12px"><h2>${e.nome}</h2><p style="font-size:12px;color:#666">${e.categoria}</p></div></div>`;}
-function showHome(){document.getElementById("home").style.display="block";document.getElementById("pageEmp").classList.remove("open");}
+
+window.avaliar = async (i)=>{
+  let email=document.getElementById("emailA").value.toLowerCase().trim();
+  let nota=parseInt(document.getElementById("notaA").value);
+  let coment=document.getElementById("comentA").value.trim();
+  if(!email.includes("@")){alert("Email inválido");return}
+  let e = empresas[i];
+  if(e.avaliacoes && e.avaliacoes.some(a=>a.email===email)){alert("Esse email já avaliou!");return}
+  try{
+    const ref = doc(db, "empresas", e._id);
+    let novas = [...(e.avaliacoes||[]), {email,nota,coment}];
+    await updateDoc(ref, {avaliacoes: novas});
+    alert("Avaliação salva na nuvem!");
+    carregarNuvem();
+    abrir(i);
+  }catch(err){ alert("Erro: "+err.message); }
+}
+
+window.showHome = ()=>{document.getElementById("home").style.display="block";document.getElementById("pageEmp").classList.remove("open");}
 </script>
 </body>
 </html>
