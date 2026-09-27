@@ -1,180 +1,102 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Top Five - Santa Rita</title>
-<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-<link rel="icon" type="image/x-icon" href="favicon.ico">
-<link rel="manifest" href="site.webmanifest">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TopFive Santa Rita - As 5 Melhores Empresas da Cidade</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui}
-body{background:#f5f5f7;color:#111}
-header{background:#0f0f0f;color:#fff;padding:14px 18px;display:flex;gap:10px;align-items:center;position:sticky;top:0;z-index:20;flex-wrap:wrap}
-.logo{font-weight:900;font-size:22px;margin-right:10px}
-.logo span{color:#f7c600}
-.btn{border:0;padding:10px 16px;border-radius:999px;font-weight:700;cursor:pointer;font-size:14px}
-.btn-dark{background:#2a2a2a;color:#fff}
-.btn-yellow{background:#f7c600;color:#111}
-.btn-blue{background:#2b7bff;color:#fff}
-.btn-green{background:#00c851;color:#fff}
-main{padding:18px;max-width:950px;margin:auto}
-.card{background:#fff;border-radius:18px;padding:16px;margin-bottom:14px;box-shadow:0 4px 20px rgba(0,0,0,.06);cursor:pointer}
-.muted{color:#666;font-size:14px}
-input,select,textarea{width:100%;padding:13px;border-radius:12px;border:1px solid #ddd;margin-top:6px;margin-bottom:12px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-img.thumb{width:100%;height:180px;object-fit:cover;border-radius:12px}
-img.thumb-big{width:100%;border-radius:12px;margin-bottom:10px}
-.badge{display:inline-block;background:#f0f0f0;border-radius:8px;padding:5px 10px;font-size:12px;font-weight:600}
-.stars{color:#f7c600;font-size:20px}
-.star-input{font-size:32px;cursor:pointer;color:#ddd}
-.star-input.active{color:#f7c600}
-#statusBox{background:#fff;border-radius:12px;padding:14px;margin-bottom:14px;border:1px dashed #ccc}
-.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;align-items:flex-start;justify-content:center;padding:16px;overflow:auto}
-.modalBox{background:#fff;border-radius:18px;padding:20px;max-width:500px;width:100%;margin-top:20px;max-height:90vh;overflow:auto}
+:root{--gold:#FFD700;--black:#0a0a0a;--card:#151515;--gray:#888}
+*{margin:0;padding:0;box-sizing:border-box}body{background:#fff;color:#111;font-family:'Inter',sans-serif}
+.top{padding:14px 5%;display:flex;justify-content:space-between;align-items:center;background:#0a0a0a;position:sticky;top:0;z-index:99;border-bottom:2px solid var(--gold)}
+.logo{font-family:'Oswald';font-size:22px;color:#fff;letter-spacing:2px} .logo span{color:var(--gold)}
+.btn{background:var(--gold);color:#000;padding:12px 24px;border-radius:8px;font-weight:800;text-decoration:none;display:inline-block;border:0;cursor:pointer}
+.btn-black{background:#000;color:var(--gold);border:1px solid var(--gold)}
+.hero{background:#0a0a0a;color:#fff;padding:50px 5% 40px;text-align:center}
+.hero h1{font-family:'Oswald';font-size:48px;line-height:.95;text-transform:uppercase;max-width:700px;margin:0 auto}
+.hero h1 em{color:var(--gold);font-style:normal}
+.hero p{color:#999;margin:18px auto;max-width:600px;font-size:16px;line-height:1.5}
+.badge{background:#1a1a1a;border:1px solid #222;padding:6px 12px;border-radius:20px;font-size:11px;color:#aaa;display:inline-block;margin:4px}
+.section{padding:40px 5%}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{background:#fff;border:1px solid #e5e5e5;border-radius:16px;padding:18px;text-align:center}
+.ranking{background:#f6f6f6}
+.emp-card{background:#fff;border-radius:16px;overflow:hidden;border:1px solid #e5e5e5;display:flex;flex-direction:column}
+.emp-card img{width:100%;height:160px;object-fit:cover}
+.emp-info{padding:14px}
+.stars{color:#ffb800}
+.price{padding:40px 5%;background:#0a0a0a;color:#fff;text-align:center}
+.plan{background:#151515;border:1px solid #222;border-radius:16px;padding:24px;max-width:380px;margin:20px auto}
+.plan b{font-family:'Oswald';font-size:28px}
+.plan ul{text-align:left;margin:16px 0;color:#aaa;font-size:14px;line-height:1.8;list-style:none}
+.plan ul li::before{content:'✓ ';color:var(--gold)}
+@media(max-width:800px){.hero h1{font-size:32px}.grid3{grid-template-columns:1fr}}
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
-<header>
-<div class="logo">Top<span>Five</span></div>
-<button class="btn btn-dark" onclick="showTab('empresas')">Empresas</button>
-<button class="btn btn-yellow" onclick="showTab('rank')">🏆 Ranking</button>
-<button class="btn btn-blue" onclick="showTab('cad')">🔒 Cadastrar</button>
-</header>
-<main>
-<div id="tab-empresas"><div id="statusBox">⏳ Carregando...</div><div id="lista"></div></div>
-<div id="tab-rank" style="display:none"><h2>🏆 Ranking</h2><div id="rankLista"></div></div>
-<div id="tab-cad" style="display:none"><div class="card" style="cursor:default"><h3>🔒 Área Admin</h3><input id="senha" type="password" placeholder="Senha de administrador"><input id="nome" placeholder="Nome da empresa *"><input id="cnpj" placeholder="CNPJ"><input id="email" placeholder="E-mail"><input id="whats" placeholder="WhatsApp"><select id="cat"><option value="">Categoria *</option><option>Venda de Serviços</option><option>Alimentação</option><option>Saúde</option><option>Beleza</option><option>Educação</option><option>Varejo</option><option>Outros</option></select><textarea id="desc" placeholder="Descrição"></textarea><input id="fotos" type="file" multiple accept="image/*"><div id="preview" class="grid"></div><button class="btn btn-blue" id="btnSalvar" onclick="salvar()" style="width:100%;margin-top:12px">Salvar empresa</button><p id="saveStatus" class="muted"></p><hr style="margin:16px 0"><button class="btn btn-yellow" onclick="limparAntigas()" style="width:100%">🧹 Apagar avaliações antigas sem e-mail</button><p id="cleanStatus" class="muted"></p></div></div>
-<div id="empresaModal" class="modal" onclick="if(event.target==this) fecharEmpresa()"><div class="modalBox"><div id="empresaDetalhe"></div></div></div>
-<div id="modalAvaliar" class="modal" onclick="if(event.target==this) fecharAvaliar()"><div class="modalBox"><h3 id="avNome">Avaliar</h3><div style="text-align:center;margin:12px 0"><span class="star-input" onclick="setNota(1)">★</span><span class="star-input" onclick="setNota(2)">★</span><span class="star-input" onclick="setNota(3)">★</span><span class="star-input" onclick="setNota(4)">★</span><span class="star-input" onclick="setNota(5)">★</span></div><input id="avQuem" placeholder="Seu nome *"><input id="avEmail" type="email" placeholder="Seu e-mail *"><textarea id="avComent" placeholder="Comentário"></textarea><button class="btn btn-green" onclick="enviarAvaliacao()" style="width:100%">Enviar avaliação</button><button class="btn btn-dark" onclick="fecharAvaliar()" style="width:100%;margin-top:8px">Cancelar</button><div id="listaAv" style="margin-top:18px"></div><p id="avStatus" class="muted"></p></div></div>
-<div id="qrModal" class="modal" onclick="if(event.target==this) fecharQR()"><div class="modalBox" style="text-align:center"><h3 id="qrNome"></h3><div id="qrcode" style="display:flex;justify-content:center;margin:16px 0"></div><p id="qrLink" class="muted" style="font-size:11px;word-break:break-all"></p><button class="btn btn-dark" onclick="fecharQR()" style="width:100%;margin-top:10px">Fechar</button><button class="btn btn-blue" onclick="baixarQR()" style="width:100%;margin-top:8px">⬇️ Baixar QR</button></div></div>
-</main>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, collection, getDocs, addDoc, query, where, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-const firebaseConfig = {
-  apiKey: "AIzaSyAxAzMNQkH_MwJtlXPa3BTxi2N9vbm6EkI",
-  authDomain: "topfive-73afe.firebaseapp.com",
-  projectId: "topfive-73afe",
-  storageBucket: "topfive-73afe.firebasestorage.app",
-  messagingSenderId: "639921758998",
-  appId: "1:639921758998:web:459db23b535279bac76637"
-};
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-let fotosBase64=[]; let empresasCache=[]; let empresaAtiva=null; let notaAtual=0;
-const SENHA_ADMIN = "102030";
-window.showTab=(t)=>{
-  document.getElementById('tab-empresas').style.display=t==='empresas'?'block':'none';
-  document.getElementById('tab-rank').style.display=t==='rank'?'block':'none';
-  document.getElementById('tab-cad').style.display=t==='cad'?'block':'none';
-  if(t==='empresas') carregar();
-  if(t==='rank') carregarRank();
-}
-function comprimir(f){return new Promise(r=>{const fr=new FileReader();fr.onload=e=>{const im=new Image();im.onload=()=>{const c=document.createElement('canvas');let w=im.width,h=im.height;const m=800;if(w>h){if(w>m){h*=m/w;w=m}}else if(h>m){w*=m/h;h=m}c.width=w;c.height=h;c.getContext('2d').drawImage(im,0,0,w,h);r(c.toDataURL('image/jpeg',0.6))};im.src=e.target.result};fr.readAsDataURL(f)})}
-document.getElementById('fotos').addEventListener('change', async e=>{
-  fotosBase64=[];const p=document.getElementById('preview');p.innerHTML='Comprimindo...';
-  for(const f of e.target.files) fotosBase64.push(await comprimir(f));
-  p.innerHTML=fotosBase64.map(b=>`<img src="${b}" class="thumb">`).join('')
-});
-function renderStars(m){const n=Math.round(m||0);return '★'.repeat(n)+'☆'.repeat(5-n);}
-async function carregar(){
-  const sb=document.getElementById('statusBox');const li=document.getElementById('lista');
-  sb.textContent='⏳ Carregando...';
-  try{
-    let snapE=await getDocs(collection(db,'empresas'));
-    let medias={},counts={};
-    try{
-      let snapA=await getDocs(collection(db,'avaliacoes'));
-      snapA.forEach(d=>{const a=d.data();if(!medias[a.empresaId]){medias[a.empresaId]=0;counts[a.empresaId]=0}medias[a.empresaId]+=a.nota;counts[a.empresaId]++});
-      Object.keys(medias).forEach(k=>medias[k]/=counts[k])
-    }catch(e){}
-    if(snapE.empty){sb.textContent='✅ Nenhuma empresa';li.innerHTML='';empresasCache=[];return}
-    sb.textContent=`✅ ${snapE.size} empresa(s)`;
-    empresasCache=[];snapE.forEach(d=>empresasCache.push({id:d.id,...d.data()}));
-    empresasCache.sort((a,b)=>(medias[b.id]||0)-(medias[a.id]||0));
-    li.innerHTML=empresasCache.map(emp=>{
-      const md=medias[emp.id]||0;const qt=counts[emp.id]||0;
-      return `<div class="card" onclick="abrirEmpresa('${emp.id}')">${emp.fotos?.[0]?`<img src="${emp.fotos[0]}" class="thumb" style="margin-bottom:10px">`:''}<h3>${emp.nome}</h3><div style="margin:6px 0"><span class="badge">${emp.cat||'Outros'}</span> <span class="stars">${renderStars(md)}</span> <span class="muted">${md?md.toFixed(1):'0.0'} (${qt})</span></div><p class="muted">${(emp.desc||'').substring(0,80)}</p><div class="grid" style="margin-top:12px" onclick="event.stopPropagation()"><button class="btn btn-green" onclick="abrirAvaliar('${emp.id}','${emp.nome.replace(/'/g,"")}')">⭐ Avaliar</button><button class="btn btn-yellow" onclick="pedirSenhaQR('${emp.id}','${emp.nome.replace(/'/g,"")}')">🔒 QR Code</button></div></div>`
-    }).join('');
-    const hid=location.hash.replace('#','');if(hid){const e=empresasCache.find(x=>x.id===hid);if(e) abrirEmpresa(e.id)}
-  }catch(e){sb.textContent='❌ '+e.message; console.error(e);}
-}
-window.abrirEmpresa=(id)=>{const emp=empresasCache.find(x=>x.id===id);if(!emp)return;const box=document.getElementById('empresaDetalhe');const fotosHtml=(emp.fotos||[]).map(f=>`<img src="${f}" class="thumb-big">`).join('')||'<p class="muted">Sem fotos</p>';box.innerHTML=`${fotosHtml}<h2>${emp.nome}</h2><p style="margin:8px 0"><span class="badge">${emp.cat||''}</span></p><p class="muted" style="margin:10px 0;white-space:pre-wrap">${emp.desc||'Sem descrição'}</p>${emp.whats?`<p><b>Whats:</b> ${emp.whats}</p>`:''}${emp.email?`<p><b>Email:</b> ${emp.email}</p>`:''}${emp.cnpj?`<p><b>CNPJ:</b> ${emp.cnpj}</p>`:''}<div class="grid" style="margin-top:16px"><button class="btn btn-green" onclick="fecharEmpresa(); abrirAvaliar('${emp.id}','${emp.nome.replace(/'/g,"")}')">⭐ Avaliar</button><button class="btn btn-yellow" onclick="pedirSenhaQR('${emp.id}','${emp.nome.replace(/'/g,"")}')">🔒 QR Code</button></div><button class="btn btn-dark" onclick="fecharEmpresa()" style="width:100%;margin-top:12px">Fechar</button>`;document.getElementById('empresaModal').style.display='flex';}
-window.fecharEmpresa=()=>document.getElementById('empresaModal').style.display='none';
-window.pedirSenhaQR=(id,nome)=>{const s=prompt("🔒 Digite a senha de ADMIN para gerar o QR Code:");if(s===null)return;if(s!==SENHA_ADMIN){alert("Senha incorreta!");return;}gerarQR(id,nome);}
-async function carregarRank(){
-  const r=document.getElementById('rankLista');r.innerHTML='⏳ Carregando...';
-  try{
-    const se=await getDocs(collection(db,'empresas'));
-    let medias={},counts={};
-    try{
-      const sa=await getDocs(collection(db,'avaliacoes'));
-      sa.forEach(d=>{const a=d.data();if(!medias[a.empresaId]){medias[a.empresaId]=0;counts[a.empresaId]=0}medias[a.empresaId]+=a.nota;counts[a.empresaId]++});
-      Object.keys(medias).forEach(k=>medias[k]/=counts[k])
-    }catch(e){console.error(e);}
-    if(se.empty){r.innerHTML='Nenhuma empresa';return}
-    const lista=[];se.forEach(doc=>{const emp=doc.data();lista.push({id:doc.id,nome:emp.nome,cat:emp.cat||'Outros',media:medias[doc.id]||0,qtd:counts[doc.id]||0})});
-    lista.sort((a,b)=>b.media-a.media);
-    const porCat={};lista.forEach(l=>{if(!porCat[l.cat])porCat[l.cat]=[];porCat[l.cat].push(l)});
-    r.innerHTML=Object.keys(porCat).map(cat=>`<div class="card" style="cursor:default"><h3>${cat}</h3>${porCat[cat].map((e,i)=>`<p style="margin-top:8px;cursor:pointer" onclick="abrirEmpresa('${e.id}')">${i+1}º ${e.nome} - <span class="stars">${renderStars(e.media)}</span> ${e.media.toFixed(1)} (${e.qtd})</p>`).join('')}</div>`).join('');
-  }catch(e){r.innerHTML='❌ Erro no ranking: '+e.message; console.error(e);}
-}
-window.setNota=n=>{notaAtual=n;document.querySelectorAll('.star-input').forEach((el,i)=>el.classList.toggle('active',i<n))}
-window.abrirAvaliar=async(id,nome)=>{
-  empresaAtiva=id;document.getElementById('avNome').textContent='Avaliar: '+nome;
-  document.getElementById('modalAvaliar').style.display='flex';notaAtual=0;setNota(0);
-  document.getElementById('avQuem').value='';document.getElementById('avEmail').value='';
-  document.getElementById('avComent').value='';document.getElementById('avStatus').textContent='';
-  const la=document.getElementById('listaAv');la.innerHTML='Carregando...';
-  try{
-    const q=query(collection(db,'avaliacoes'),where('empresaId','==',id));
-    const s=await getDocs(q);
-    if(s.empty){la.innerHTML='<p class="muted">Nenhuma avaliação ainda</p>';return}
-    const avs=[];s.forEach(d=>avs.push(d.data()));avs.sort((a,b)=>b.criado-a.criado);
-    la.innerHTML='<h4>Avaliações:</h4>'+avs.map(a=>`<div style="border-top:1px solid #eee;padding:10px 0"><span class="stars">${renderStars(a.nota)}</span> <b>${a.nome}</b><p class="muted">${a.comentario||''}</p></div>`).join('')
-  }catch(e){la.textContent='Erro: '+e.message}
-}
-window.fecharAvaliar=()=>document.getElementById('modalAvaliar').style.display='none';
-window.enviarAvaliacao=async()=>{
-  if(!notaAtual){alert('Escolha as estrelas! ⭐');return}
-  const nome=document.getElementById('avQuem').value.trim();
-  const emailRaw=document.getElementById('avEmail').value.trim();
-  const email=emailRaw.toLowerCase();
-  const comentario=document.getElementById('avComent').value.trim();
-  const st=document.getElementById('avStatus');
-  if(!nome){alert('Digite seu nome');return}
-  if(!email||!email.includes('@')){alert('Digite um e-mail válido!');return}
-  st.textContent='⏳ Verificando...';
-  try{
-    const qCheck=query(collection(db,'avaliacoes'),where('empresaId','==',empresaAtiva));
-    const snapCheck=await getDocs(qCheck);
-    let jaAvaliou=false;
-    snapCheck.forEach(d=>{ if((d.data().email||'').toLowerCase()===email) jaAvaliou=true; });
-    if(jaAvaliou){st.textContent='❌ Esse e-mail já avaliou!';alert('⛔ Esse e-mail já avaliou essa empresa!');return;}
-    st.textContent='Enviando...';
-    await addDoc(collection(db,'avaliacoes'),{empresaId:empresaAtiva,nome,email,nota:notaAtual,comentario,criado:Date.now()});
-    st.textContent='✅ Enviado!';setTimeout(()=>{fecharAvaliar();fecharEmpresa();carregar()},1200)
-  }catch(e){st.textContent='❌ '+e.message; console.error(e);}
-}
-window.gerarQR=(id,nome)=>{document.getElementById('qrNome').textContent=nome;const link=`https://ianzinpaixao-collab.github.io/Teste2/#${id}`;document.getElementById('qrLink').textContent=link;const b=document.getElementById('qrcode');b.innerHTML='';new QRCode(b,{text:link,width:220,height:220});document.getElementById('qrModal').style.display='flex'}
-window.fecharQR=()=>document.getElementById('qrModal').style.display='none';
-window.baixarQR=()=>{const c=document.querySelector('#qrcode canvas');if(c){const a=document.createElement('a');a.href=c.toDataURL();a.download='qrcode.png';a.click()}}
-window.salvar=async()=>{if(document.getElementById('senha').value!==SENHA_ADMIN){alert('Senha incorreta');return}const nome=document.getElementById('nome').value.trim();if(!nome){alert('Nome obrigatório');return}const btn=document.getElementById('btnSalvar');const st=document.getElementById('saveStatus');btn.disabled=true;btn.textContent='Salvando...';st.textContent='Enviando...';try{await addDoc(collection(db,'empresas'),{nome,cnpj:document.getElementById('cnpj').value,email:document.getElementById('email').value,whats:document.getElementById('whats').value,cat:document.getElementById('cat').value||'Outros',desc:document.getElementById('desc').value,fotos:fotosBase64.slice(0,6),criado:Date.now()});st.textContent='✅ Salvo!';setTimeout(()=>{showTab('empresas');btn.disabled=false;btn.textContent='Salvar empresa';},1200)}catch(e){st.textContent='❌ '+e.message;btn.disabled=false}}
-window.limparAntigas=async()=>{
-  if(document.getElementById('senha').value!==SENHA_ADMIN){alert('Digite a senha admin primeiro!');return}
-  if(!confirm('Apagar TODAS avaliações antigas que estão sem e-mail?')) return;
-  const cs=document.getElementById('cleanStatus');cs.textContent='⏳ Limpando...';
-  try{
-    const snap=await getDocs(collection(db,'avaliacoes'));let apag=0;
-    for(const d of snap.docs){const data=d.data();if(!data.email){await deleteDoc(doc(db,'avaliacoes',d.id));apag++;}}
-    cs.textContent=`✅ ${apag} avaliações antigas apagadas!`;setTimeout(()=>carregar(),1000);
-  }catch(e){cs.textContent='❌ '+e.message}
-}
-carregar();
-</script>
+
+<div class="top">
+<div class="logo">TOP<span>FIVE</span> <small style="font-size:10px;color:#666"> SANTA RITA</small></div>
+<a href="#planos" class="btn" style="padding:8px 16px;font-size:13px">Cadastrar Minha Empresa</a>
+</div>
+
+<div class="hero">
+<div class="badge" style="background:#FFD70022;color:#FFD700;border-color:#FFD70044">🏆 RANKING OFICIAL 2026</div>
+<h1>AS 5 MELHORES EMPRESAS DE <em>CADA SETOR</em> DE SANTA RITA</h1>
+<p>O ranking oficial votado pelo povo. Quem está no Top 5 ganha o Selo de Empresa Verificada e mais clientes.</p>
+<a href="#planos" class="btn" style="padding:18px 32px;margin-top:10px">QUERO MINHA EMPRESA NO TOP 5 →</a>
+</div>
+
+<div class="section ranking" id="empresas">
+<h2 style="font-family:'Oswald';font-size:32px">EMPRESA EM DESTAQUE ESSA SEMANA</h2>
+
+<div class="grid3" style="margin-top:20px">
+
+<div class="emp-card">
+<img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?w=500">
+<div class="emp-info">
+<div class="badge">🥇 1º LUGAR - CONFEITARIA</div>
+<h3>ArtBuffet</h3>
+<p class="stars">★★★★★ 4.5 (2 avaliações)</p>
+<p style="color:#666;font-size:12px;margin-top:4px">📍 Santa Rita - MA • Venda de Serviços</p>
+<a href="#" class="btn btn-black" style="width:100%;margin-top:10px;padding:10px">AVALIAR ⭐</a>
+</div>
+</div>
+
+<div class="emp-card" style="border:2px dashed #FFD700;background:#FFFBEB">
+<div style="padding:40px 14px;text-align:center">
+<div style="font-size:40px">👑</div>
+<h3>SUA EMPRESA AQUI?</h3>
+<p style="color:#666;font-size:13px;margin:8px 0">Ainda tem 4 vagas no Top 5 de Confeitaria e Doces.</p>
+<a href="#planos" class="btn" style="width:100%;margin-top:10px">QUERO ENTRAR</a>
+</div>
+</div>
+
+<div class="emp-card" style="border:2px dashed #ddd;background:#fafafa">
+<div style="padding:40px 14px;text-align:center">
+<div style="font-size:40px">✂️</div>
+<h3>CATEGORIA BARBEARIA</h3>
+<p style="color:#666;font-size:13px;margin:8px 0">Nenhuma empresa no Top 5 ainda. Seja o primeiro!</p>
+<a href="#planos" class="btn btn-black" style="width:100%;margin-top:10px">OCUPAR VAGA</a>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="price" id="planos">
+<h2 style="font-family:'Oswald';font-size:36px">QUANTO CUSTA ESTAR NO <span style="color:var(--gold)">TOP 5?</span></h2>
+<div class="plan">
+<b style="color:var(--gold)">PLANO TOP 5</b><br>
+<span style="font-size:36px;font-weight:800">R$97</span><span style="color:#888">/mês</span>
+<ul>
+<li>Página exclusiva com WhatsApp e Instagram</li>
+<li>Selo "Empresa Verificada TopFive"</li>
+<li>QR Code pra coletar avaliações na loja</li>
+<li>Aparece no Top 5 da sua categoria</li>
+</ul>
+<a href="https://wa.me/559891648974?text=Quero%20minha%20empresa%20na%20TopFive" class="btn" style="width:100%;padding:16px">QUERO ENTRAR NO TOP 5 →</a>
+</div>
+</div>
+
 </body>
-  </html>
+</html>
